@@ -15,7 +15,7 @@
             [afterglow.rhythm :as rhythm]
             [afterglow.show :as show]
             [afterglow.show-context :refer :all]
-            [com.evocomputing.colors :refer [color-create-color hue adjust-hue]]
+            [com.evocomputing.colors :refer [create-color hue adjust-hue]]
             [taoensso.timbre :as timbre]))
 
 (defonce ^{:doc "Holds my show if it has been created,
@@ -40,12 +40,7 @@
                     ;;       to something descriptive and in your own style:
                     (show/show :universes [1] :description "My Show"))))
 
-  ;; TODO: Replace this to patch in an actual fixture in your show, at its actual
-  ;;       universe, DMX address, physical location and orientation, then add all
-  ;;       your other fixtures one by one.
-  (show/patch-fixture! :torrent-1 (blizzard/torrent-f3) 1 1
-                       :x (tf/inches 44) :y (tf/inches 51.75) :z (tf/inches -4.75)
-                       :y-rotation (tf/degrees 0))
+  (show/patch-fixture! :hyp-rgb (adj/hypnotic-rgb) universe 1)
 
   ;; Return the show's symbol, rather than the actual map, which gets huge with
   ;; all the expanded, patched fixtures in it.
