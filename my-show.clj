@@ -23,6 +23,14 @@
   my-show
   (atom nil))
 
+(defn my-rgb
+  "A simple RGB light"
+  []
+  {:channels [(chan/color 1 :red)
+              (chan/color 2 :green)
+              (chan/color 3 :blue)]
+   :name "Simple RGB"})
+
 (defn use-my-show
   "Set up the show on the OLA universes it actually needs."
   []
@@ -40,7 +48,7 @@
                     ;;       to something descriptive and in your own style:
                     (show/show :universes [1] :description "My Show"))))
 
-  (show/patch-fixture! :hyp-rgb (adj/hypnotic-rgb) universe 1)
+  (show/patch-fixture! :rgb-1 (my-rgb) 1 1)
 
   ;; Return the show's symbol, rather than the actual map, which gets huge with
   ;; all the expanded, patched fixtures in it.
