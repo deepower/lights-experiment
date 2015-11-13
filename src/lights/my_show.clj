@@ -59,8 +59,11 @@
                     ;;       to something descriptive and in your own style:
                     (show/show :universes [1] :description "My Show"))))
 
+  ;; 2DO: find what "rgb-1" means and where to look for documentation
   (show/patch-fixture! :rgb-1 (my-rgb) 1 1)
-  (show/patch-fixture! :head-1 (head280) 1 220)
+
+  ;; Code below isn't working :(
+  ;; (show/patch-fixture! :head-1 (head280) 1 220)
 
   ;; Return the show's symbol, rather than the actual map, which gets huge with
   ;; all the expanded, patched fixtures in it.
