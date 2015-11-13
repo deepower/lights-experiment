@@ -29,8 +29,18 @@
   []
   {:channels [(chan/color 1 :red)
               (chan/color 2 :green)
-              (chan/color 3 :blue)]
+              (chan/color 3 :blue)
+              (chan/color 4 :white)]
    :name "Simple RGB"})
+
+(defn head280
+  "Head PHS 280"
+  []
+  {:channels [(chan/tilt 1 :tilt)
+              (chan/pan 2 :pan)
+              (chan/functions 10 :shutter 0 "shutter-closed" 32 "shutter-open")
+              (chan/dimmer 11)]
+   :name "Head PHS 280"})
 
 (defn use-my-show
   "Set up the show on the OLA universes it actually needs."
@@ -50,6 +60,7 @@
                     (show/show :universes [1] :description "My Show"))))
 
   (show/patch-fixture! :rgb-1 (my-rgb) 1 1)
+  (show/patch-fixture! :head-1 (head280) 1 220)
 
   ;; Return the show's symbol, rather than the actual map, which gets huge with
   ;; all the expanded, patched fixtures in it.
