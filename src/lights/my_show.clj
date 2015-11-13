@@ -1,10 +1,11 @@
-(ns my-show
+(ns lights.my-show
   "Set up the fixtures, effects, and cues I actually want to use."
   ;; TODO: Your list of required namespaces will differ from this, depending on
   ;;       what fixtures you actually use, and what effects and cues you create.
-  (:require [afterglow.core :as core]
+  (:require [afterglow.channels :as chan]
+            [afterglow.core :as core]
             [afterglow.transform :as tf]
-            [afterglow.effects.color :refer [color-effect]]
+            [afterglow.effects.color :as color-fx]
             [afterglow.effects.cues :as cues]
             [afterglow.effects.dimmer :refer [dimmer-effect]]
             [afterglow.effects.fun :as fun]
@@ -15,7 +16,7 @@
             [afterglow.rhythm :as rhythm]
             [afterglow.show :as show]
             [afterglow.show-context :refer :all]
-            [com.evocomputing.colors :refer [create-color hue adjust-hue]]
+            [com.evocomputing.colors :refer [color-name create-color hue adjust-hue]]
             [taoensso.timbre :as timbre]))
 
 (defonce ^{:doc "Holds my show if it has been created,
@@ -55,6 +56,24 @@
   '*show*)
 
 (use-my-show)  ; Set up my show as the default show, using the function above.
+
+(defn global-color-effect
+  "Make a color effect which affects all lights in the sample show.
+  This became vastly more useful once I implemented dynamic color
+  parameters. Can include only a specific set of lights by passing
+  them with :lights"
+  [color & {:keys [include-color-wheels? lights] :or {lights (show/all-fixtures)}}]
+  (try
+    (let [[c desc] (cond (= (type color) :com.evocomputing.colors/color)
+                       [color (color-name color)]
+                       (and (satisfies? params/IParam color)
+                            (= (params/result-type color) :com.evocomputing.colors/color))
+                       [color "variable"]
+                       :else
+                       [(create-color color) color])]
+      (color-fx/color-effect (str "Color: " desc) c lights :include-color-wheels? include-color-wheels?))
+    (catch Exception e
+      (throw (Exception. (str "Can't figure out how to create color from " color) e)))))
 
 ;; TODO: Add your custom effects, then assign them to cues with sensible colors
 ;;       See afterglow.examples for examples.
