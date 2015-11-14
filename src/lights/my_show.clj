@@ -36,9 +36,9 @@
 (defn head280
   "Head PHS 280"
   []
-  {:channels [(chan/tilt 1 :tilt)
-              (chan/pan 2 :pan)
-              (chan/functions 10 :shutter 0 "shutter-closed" 32 "shutter-open")
+  {:channels [(chan/tilt 1)
+              (chan/pan 2)
+              (chan/functions :shutter 10 0 "shutter-closed" 32 "shutter-open")
               (chan/dimmer 11)]
    :name "Head PHS 280"})
 
@@ -62,14 +62,18 @@
   ;; 2DO: find what "rgb-1" means and where to look for documentation
   (show/patch-fixture! :rgb-1 (my-rgb) 1 1)
 
-  ;; Code below isn't working :(
-  ;; (show/patch-fixture! :head-1 (head280) 1 220)
+  ;; Code below is working now :)
+  (show/patch-fixture! :head-1 (head280) 1 220)
 
   ;; Return the show's symbol, rather than the actual map, which gets huge with
   ;; all the expanded, patched fixtures in it.
   '*show*)
 
-(use-my-show)  ; Set up my show as the default show, using the function above.
+;; Commenting out this next line so that individual functions in this namespace
+;; can be tested while debugging them. It can be uncommented once everything
+;; is working; until then, try calling it manually as you add new fixture definitions
+;; and patch them.
+;(use-my-show)  ; Set up my show as the default show, using the function above.
 
 (defn global-color-effect
   "Make a color effect which affects all lights in the sample show.
