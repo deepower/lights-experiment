@@ -35,6 +35,7 @@
 
 (defn head280
   "Head PHS 280"
+  ;; http://media.steinigke.de/documents_t/51838206-MANUAL-1.30-en-de_00054251.pdf
   []
   {:channels [(chan/tilt 1 :tilt)
               (chan/pan 2 :pan)
