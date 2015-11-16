@@ -33,16 +33,6 @@
               (chan/color 4 :white)]
    :name "Simple RGB"})
 
-(defn head280
-  "Head PHS 280"
-  ;; http://media.steinigke.de/documents_t/51838206-MANUAL-1.30-en-de_00054251.pdf
-  []
-  {:channels [(chan/tilt 1 :tilt)
-              (chan/pan 2 :pan)
-              (chan/functions 10 :shutter 0 "shutter-closed" 32 "shutter-open")
-              (chan/dimmer 11)]
-   :name "Head PHS 280"})
-
 (defn use-my-show
   "Set up the show on the OLA universes it actually needs."
   []
@@ -62,9 +52,6 @@
 
   ;; 2DO: find what "rgb-1" means and where to look for documentation
   (show/patch-fixture! :rgb-1 (my-rgb) 1 1)
-
-  ;; Code below isn't working :(
-  ;; (show/patch-fixture! :head-1 (head280) 1 220)
 
   ;; Return the show's symbol, rather than the actual map, which gets huge with
   ;; all the expanded, patched fixtures in it.
