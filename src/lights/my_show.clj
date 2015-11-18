@@ -24,13 +24,21 @@
   my-show
   (atom nil))
 
+(defn my-rgbw
+  "A simple RGB with dimmer"
+  []
+  {:channels [(chan/color 1 :red)
+              (chan/color 2 :green)
+              (chan/color 3 :blue)
+              (chan/dimmer 4)]
+   :name "Simple RGB with dimmer"})
+
 (defn my-rgb
   "A simple RGB light"
   []
   {:channels [(chan/color 1 :red)
               (chan/color 2 :green)
-              (chan/color 3 :blue)
-              (chan/color 4 :white)]
+              (chan/color 3 :blue)]
    :name "Simple RGB"})
 
 (defn use-my-show
@@ -40,18 +48,20 @@
   ;; Create, or re-create the show. Make it the default show so we don't
   ;; need to wrap everything below in a (with-show sample-show ...) binding.
   (set-default-show!
-   (swap! my-show (fn [s]
-                    (when s
-                      (show/unregister-show s)
-                      (with-show s (show/stop!)))
-                    ;; TODO: Edit this to list the actual OLA universe(s) that
-                    ;;       your show needs to use if they are different than
-                    ;;       just universe 1, as below, and change the description
-                    ;;       to something descriptive and in your own style:
-                    (show/show :universes [1] :description "My Show"))))
+    (swap! my-show (fn [s]
+      (when s
+        (show/unregister-show s)
+        (with-show s (show/stop!)))
+      ;; TODO: Edit this to list the actual OLA universe(s) that
+      ;;       your show needs to use if they are different than
+      ;;       just universe 1, as below, and change the description
+      ;;       to something descriptive and in your own style:
+      (show/show :universes [1] :description "My Show"))))
 
-  ;; 2DO: find what "rgb-1" means and where to look for documentation
-  (show/patch-fixture! :rgb-1 (my-rgb) 1 1)
+  (show/patch-fixture! :rgbw-1 (my-rgbw) 1 1)
+  (show/patch-fixture! :rgbw-2 (my-rgbw) 1 5)
+  (show/patch-fixture! :rgbw-3 (my-rgbw) 1 9)
+  (show/patch-fixture! :rgb-1 (my-rgb) 1 13)
 
   ;; Return the show's symbol, rather than the actual map, which gets huge with
   ;; all the expanded, patched fixtures in it.
@@ -77,5 +87,21 @@
     (catch Exception e
       (throw (Exception. (str "Can't figure out how to create color from " color) e)))))
 
-;; TODO: Add your custom effects, then assign them to cues with sensible colors
-;;       See afterglow.examples for examples.
+(defn global-dimmer-effect
+  "Return an effect that sets all the dimmers in the sample rig.
+  Originally this had to be to a static value, but now that dynamic
+  parameters exist, it can vary in response to a MIDI mapped show
+  variable, an oscillator, or the location of the fixture. You can
+  override the default name by passing in a value with :effect-name"
+  [level & {:keys [effect-name]}]
+  (dimmer-effect level (show/all-fixtures) :effect-name effect-name))
+
+
+(defn fiat-lux
+  "Start simple with a cool blue color from all the lights."
+  []
+  (show/add-effect! :color (global-color-effect "slateblue" :include-color-wheels? true))
+  (show/add-effect! :dimmers (global-dimmer-effect 255))
+  (show/add-effect! :torrent-shutter
+                    (afterglow.effects.channel/function-effect
+                     "Torrents Open" :shutter-open 50 (show/fixtures-named "torrent"))))
