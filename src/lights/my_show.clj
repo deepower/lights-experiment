@@ -56,7 +56,7 @@
       ;;       your show needs to use if they are different than
       ;;       just universe 1, as below, and change the description
       ;;       to something descriptive and in your own style:
-      (show/show :universes [1] :description "My Show"))))
+      (show/show :universes [1] :description "Deepower"))))
 
   (show/patch-fixture! :rgbw-1 (my-rgbw) 1 1)
   (show/patch-fixture! :rgbw-2 (my-rgbw) 1 5)
@@ -105,3 +105,15 @@
   (show/add-effect! :torrent-shutter
                     (afterglow.effects.channel/function-effect
                      "Torrents Open" :shutter-open 50 (show/fixtures-named "torrent"))))
+
+(core/start-web-server 16000 true)
+(show/start!)     ; Start sending its DMX frames.
+
+; Dim all PARs to maximum
+(show/add-effect! :dimmers (global-dimmer-effect 189))
+
+; Variable to control lightness level on all PARs
+(show/set-variable! :lightness-level 50)
+(show/add-effect! :color (global-color-effect
+  (params/build-color-param :h 60 :s 100 :l :lightness-level)))
+(show/set-variable! :lightness-level 50)
