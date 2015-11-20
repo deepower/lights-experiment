@@ -113,7 +113,15 @@
 (show/add-effect! :dimmers (global-dimmer-effect 189))
 
 ; Variable to control lightness level on all PARs
-(show/set-variable! :lightness-level 50)
+(show/set-variable! :lightness-level 30)
 (show/add-effect! :color (global-color-effect
   (params/build-color-param :h 60 :s 100 :l :lightness-level)))
-(show/set-variable! :lightness-level 50)
+
+(def hue-param (params/build-oscillated-param
+                 (oscillators/sawtooth-bar) :max 360))
+
+(def light-param (params/build-oscillated-param
+                 (oscillators/triangle-beat :beat-ratio 0.5) :max 20))
+
+(show/add-effect! :color (global-color-effect
+   (params/build-color-param :s 100 :l light-param :h hue-param)))
