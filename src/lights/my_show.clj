@@ -117,11 +117,27 @@
 (show/add-effect! :color (global-color-effect
   (params/build-color-param :h 60 :s 100 :l :lightness-level)))
 
-(def hue-param (params/build-oscillated-param
-                 (oscillators/sawtooth-bar) :max 360))
+; Oscillation of hue, temporary removed
+;(def hue-param (params/build-oscillated-param
+;                 (oscillators/sawtooth-bar) :max 360))
+
+(show/add-midi-control-to-var-mapping
+  "Traktor Kontrol Z1 Input" 0 4 :knob-1 :max 360)
+
+(show/add-midi-control-to-var-mapping
+  "midi-net" 0 1 :audio-drums :max 30)
+
+(show/add-midi-control-to-var-mapping
+  "midi-net" 0 2 :audio-bass :max 30)
+
+(show/add-midi-control-to-var-mapping
+  "midi-net" 0 3 :audio-percussion :min 10 :max 30)
+
+(show/add-midi-control-to-var-mapping
+  "midi-net" 0 5 :audio-solo :max 30)
 
 (def light-param (params/build-oscillated-param
-                 (oscillators/triangle-beat :beat-ratio 0.5) :max 20))
+                 (oscillators/triangle-beat :beat-ratio 4) :max 20))
 
 (show/add-effect! :color (global-color-effect
-   (params/build-color-param :s 100 :l light-param :h hue-param)))
+  (params/build-color-param :h :audio-bass :s 100 :l :lightness-level)))
