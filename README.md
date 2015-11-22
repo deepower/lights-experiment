@@ -14,4 +14,3 @@ RGB light
 ## 2DO
 
 1. Sync clock by MIDI/OSC with remote Ableton Live
-2. Import MIDI levels from Live channels as variables
