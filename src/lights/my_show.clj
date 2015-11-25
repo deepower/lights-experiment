@@ -121,20 +121,24 @@
 ;(def hue-param (params/build-oscillated-param
 ;                 (oscillators/sawtooth-bar) :max 360))
 
-(show/add-midi-control-to-var-mapping
-  "Traktor Kontrol Z1 Input" 0 4 :knob-1 :max 360)
+(defn bind-midi
+  "Bind MIDI devices"
+  []
+  (show/add-midi-control-to-var-mapping
+    "Traktor Kontrol Z1 Input" 0 4 :knob-1 :max 360)
 
-(show/add-midi-control-to-var-mapping
-  "midi-net" 0 1 :audio-drums :max 30)
+  (show/add-midi-control-to-var-mapping
+    "midi-net" 0 1 :audio-drums :max 30)
 
-(show/add-midi-control-to-var-mapping
-  "midi-net" 0 2 :audio-bass :max 30)
+  (show/add-midi-control-to-var-mapping
+    "midi-net" 0 2 :audio-bass :max 30)
 
-(show/add-midi-control-to-var-mapping
-  "midi-net" 0 3 :audio-percussion :min 10 :max 30)
+  (show/add-midi-control-to-var-mapping
+    "midi-net" 0 3 :audio-percussion :min 10 :max 30)
 
-(show/add-midi-control-to-var-mapping
-  "midi-net" 0 5 :audio-solo :max 30)
+  (show/add-midi-control-to-var-mapping
+    "midi-net" 0 5 :audio-solo :max 30)
+)
 
 (def light-param (params/build-oscillated-param
                  (oscillators/triangle-beat :beat-ratio 4) :max 20))
