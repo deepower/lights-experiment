@@ -10,10 +10,7 @@ RGB light
 
 ## 2DO
 
-1. Sync clock by MIDI/OSC with remote Ableton Live
 2. Try sparks https://github.com/brunchboy/afterglow/blob/master/doc/effects.adoc#scenes
-3. How to create scenes/cues
-4. Try chase effects https://github.com/brunchboy/afterglow/blob/master/doc/effects.adoc#chases 
 5. Try Iris out https://github.com/brunchboy/afterglow/blob/master/doc/effects.adoc#color-cycle-chases
 6. Try Sparkle https://github.com/brunchboy/afterglow/blob/master/doc/effects.adoc#sparkle
 7. Try Strobe with Quneo https://github.com/brunchboy/afterglow/blob/master/doc/effects.adoc#strobe

@@ -4,6 +4,7 @@
   ;;       what fixtures you actually use, and what effects and cues you create.
   (:require [afterglow.channels :as chan]
             [afterglow.core :as core]
+            [afterglow.controllers :as ct]
             [afterglow.transform :as tf]
             [afterglow.effects.color :as color-fx]
             [afterglow.effects.cues :as cues]
@@ -152,11 +153,14 @@
     "midi-net" 1 5 :audio-solo :max 30)
 )
 
-(def light-param (params/build-oscillated-param
+(defn light-sawtooth
+  "Change light according to sawtooth osc"
+  []
+  (def light-param (params/build-oscillated-param
                  (oscillators/sawtooth-beat :beat-ratio 2 :down true) :max 20))
-
-(show/add-effect! :color (global-color-effect
-  (params/build-color-param :h 60 :s 100 :l light-param)))
+  (show/add-effect! :color (global-color-effect
+    (params/build-color-param :h 60 :s 100 :l light-param)))
+  )
 
 (def light-beat (params/build-oscillated-param
                  (oscillators/square-beat) :max 20))
@@ -169,6 +173,56 @@
   )
 
 (defn blue-on-one
-  "Assing blue color to big PAR"
+  "Assing blue color to a big PAR"
   []
   (show/add-effect! :color (afterglow.effects.color/color-effect "simple-blue" (params/build-color-param :h 120 :s 100 :l light-param) (show/fixtures-named "rgb-1"))))
+
+(defn global-color-cue
+  "Create a cue-grid entry which establishes a global color effect."
+  [color x y & {:keys [include-color-wheels? held]}]
+  (let [cue (cues/cue :color (fn [_] (global-color-effect color :include-color-wheels? include-color-wheels?))
+                      :held held
+                      :color (create-color color))]
+    (ct/set-cue! (:cue-grid *show*) x y cue)))
+
+(defn make-cues
+  "Create cues."
+  []
+    (let [hue-bar (params/build-oscillated-param  ; Spread a rainbow across a bar of music
+                 (oscillators/sawtooth-bar) :max 360)
+        desat-beat (params/build-oscillated-param  ; Desaturate a color as a beat progresses
+                    (oscillators/sawtooth-beat :down? true) :max 100)
+        hue-gradient (params/build-spatial-param  ; Spread a rainbow across the light grid
+                      (show/all-fixtures)
+                      (fn [head] (- (:x head) (:min-x @(:dimensions *show*)))) :max 360)
+        hue-z-gradient (params/build-spatial-param  ; Spread a rainbow across the light grid front to back
+                        (show/all-fixtures)
+                        (fn [head] (- (:z head) (:min-z @(:dimensions *show*)))) :max 360)]
+
+  (global-color-cue "red" 0 0 :include-color-wheels? true)
+  (global-color-cue "orange" 1 0 :include-color-wheels? true)
+  (global-color-cue "yellow" 2 0 :include-color-wheels? true)
+  (global-color-cue "green" 3 0 :include-color-wheels? true)
+  (global-color-cue "blue" 4 0 :include-color-wheels? true)
+  (global-color-cue "purple" 5 0 :include-color-wheels? true)
+  (global-color-cue "white" 6 0 :include-color-wheels? true)
+
+  (ct/set-cue! (:cue-grid *show*) 0 1
+               (cues/cue :color (fn [_] (global-color-effect
+                                         (params/build-color-param :s :rainbow-saturation :l 50 :h hue-bar)))
+                         :short-name "Rainbow Bar Fade"
+                         :variables [{:key :rainbow-saturation :name "Saturatn" :min 0 :max 100 :start 100
+                                      :type :integer}]))
+  (ct/set-cue! (:cue-grid *show*) 1 1
+               (cues/cue :color (fn [_] (global-color-effect
+                                         (params/build-color-param :s :rainbow-saturation :l 50 :h hue-gradient)
+                                         :include-color-wheels? true))
+                         :short-name "Rainbow Grid"
+                         :variables [{:key :rainbow-saturation :name "Saturatn" :min 0 :max 100 :start 100
+                                      :type :integer}]))
+
+  ))
+
+(make-cues)
+
+(fiat-lux)
