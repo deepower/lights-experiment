@@ -24,6 +24,8 @@
   my-show
   (atom nil))
 
+
+; 2DO: understand how to pack dimmer and strobe into 1 function definition
 (defn my-rgbw
   "A simple RGB with dimmer"
   []
@@ -138,20 +140,35 @@
     "Traktor Kontrol Z1 Input" 0 4 :knob-1 :max 360)
 
   (show/add-midi-control-to-var-mapping
-    "midi-net" 0 1 :audio-drums :max 30)
+    "midi-net" 1 1 :audio-drums :max 30)
 
   (show/add-midi-control-to-var-mapping
-    "midi-net" 0 2 :audio-bass :max 30)
+    "midi-net" 1 2 :audio-bass :max 30)
 
   (show/add-midi-control-to-var-mapping
-    "midi-net" 0 3 :audio-percussion :min 10 :max 30)
+    "midi-net" 1 3 :audio-percussion :min 10 :max 30)
 
   (show/add-midi-control-to-var-mapping
-    "midi-net" 0 5 :audio-solo :max 30)
+    "midi-net" 1 5 :audio-solo :max 30)
 )
 
 (def light-param (params/build-oscillated-param
-                 (oscillators/triangle-beat :beat-ratio 4) :max 20))
+                 (oscillators/sawtooth-beat :beat-ratio 2 :down true) :max 20))
 
 (show/add-effect! :color (global-color-effect
-  (params/build-color-param :h :audio-bass :s 100 :l :lightness-level)))
+  (params/build-color-param :h 60 :s 100 :l light-param)))
+
+(def light-beat (params/build-oscillated-param
+                 (oscillators/square-beat) :max 20))
+
+(defn sync-midi-clock
+  "Sync MIDI clock to Ableton live session over network"
+  []
+  (show/sync-to-external-clock
+    (afterglow.midi/sync-to-midi-clock "Network midi-net"))
+  )
+
+(defn blue-on-one
+  "Assing blue color to big PAR"
+  []
+  (show/add-effect! :color (afterglow.effects.color/color-effect "simple-blue" (params/build-color-param :h 120 :s 100 :l light-param) (show/fixtures-named "rgb-1"))))
