@@ -58,10 +58,10 @@
       ;;       to something descriptive and in your own style:
       (show/show :universes [1] :description "Deepower"))))
 
-  (show/patch-fixture! :rgbw-1 (my-rgbw) 1 1)
-  (show/patch-fixture! :rgbw-2 (my-rgbw) 1 5)
-  (show/patch-fixture! :rgbw-3 (my-rgbw) 1 9)
-  (show/patch-fixture! :rgb-1 (my-rgb) 1 13)
+  (show/patch-fixture! :rgbw-1 (my-rgbw) 1 1 :x 1)
+  (show/patch-fixture! :rgbw-2 (my-rgbw) 1 5 :x 2)
+  (show/patch-fixture! :rgbw-3 (my-rgbw) 1 9 :x 3)
+  (show/patch-fixture! :rgb-1 (my-rgb) 1 13  :x 3.5)
 
   ;; Return the show's symbol, rather than the actual map, which gets huge with
   ;; all the expanded, patched fixtures in it.
