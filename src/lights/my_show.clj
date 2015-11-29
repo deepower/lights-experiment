@@ -30,7 +30,17 @@
   {:channels [(chan/color 1 :red)
               (chan/color 2 :green)
               (chan/color 3 :blue)
-              (chan/dimmer 4)]
+              (chan/functions :dimmer 4
+                0 {:type :dimmer
+                  :label "Dimmer from 0 to 189"
+                  :start 0
+                  :end 189
+                  :range :variable}
+                190 {:type :strobe
+                  :label "Strobe from 190 to 255"
+                  :start 190
+                  :end 255
+                  :range :variable})]
    :name "Simple RGB with dimmer"})
 
 (defn my-rgb
