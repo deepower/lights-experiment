@@ -159,6 +159,11 @@
     (params/build-color-param :h 60 :s 100 :l light-param)))
   )
 
+(def main-color
+  "Main color of the show"
+  (afterglow.effects.params/build-color-param :h 120))
+
+
 (def light-beat (params/build-oscillated-param
                  (oscillators/square-beat) :max 20))
 
@@ -168,8 +173,6 @@
   (show/sync-to-external-clock
     (afterglow.midi/sync-to-midi-clock "Network midi-net"))
   )
-
-
 
 (fiat-lux)
 
