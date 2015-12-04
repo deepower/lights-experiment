@@ -84,12 +84,12 @@
   [color & {:keys [include-color-wheels? lights] :or {lights (show/all-fixtures)}}]
   (try
     (let [[c desc] (cond (= (type color) :com.evocomputing.colors/color)
-                       [color (color-name color)]
-                       (and (satisfies? params/IParam color)
-                            (= (params/result-type color) :com.evocomputing.colors/color))
-                       [color "variable"]
-                       :else
-                       [(create-color color) color])]
+     [color (color-name color)]
+     (and (satisfies? params/IParam color)
+          (= (params/result-type color) :com.evocomputing.colors/color))
+     [color "variable"]
+     :else
+     [(create-color color) color])]
       (color-fx/color-effect (str "Color: " desc) c lights :include-color-wheels? include-color-wheels?))
     (catch Exception e
       (throw (Exception. (str "Can't figure out how to create color from " color) e)))))
@@ -342,73 +342,6 @@
     (ct/set-cue! (:cue-grid *show*) 7 7
                  (cues/function-cue :strobe-all :strobe (show/all-fixtures) :effect-name "Raw Strobe"))
 
-
-    ;; Dimmer cues to turn on and set brightness of groups of lights
-    (ct/set-cue! (:cue-grid *show*) 0 2
-                 (cues/cue :dimmers (fn [var-map] (global-dimmer-effect
-                                                   (params/bind-keyword-param (:level var-map 255) Number 255)
-                                                   :effect-name "All Dimmers"))
-                           :variables [{:key "level" :min 0 :max 255 :start 255 :name "Level"}]
-                           :color :yellow :end-keys [:torrent-dimmers :blade-dimmers :ws-dimmers
-                                                     :puck-dimmers :hex-dimmers :snowball-dimmers]))
-    (ct/set-cue! (:cue-grid *show*) 1 2
-                 (cues/cue :torrent-dimmers (fn [var-map] (dimmer-effect
-                                                           (params/bind-keyword-param (:level var-map 255) Number 255)
-                                                           (show/fixtures-named "torrent")
-                                                           :effect-name "Torrent Dimmers"))
-                           :variables [(merge {:key "level" :min 0 :max 255 :start 255 :name "Level"})]
-                           :color :orange :end-keys [:dimmers]))
-    (ct/set-cue! (:cue-grid *show*) 2 2
-                 (cues/cue :blade-dimmers (fn [var-map] (dimmer-effect
-                                                         (params/bind-keyword-param (:level var-map 255) Number 255)
-                                                         (show/fixtures-named "blade")
-                                                         :effect-name "Blade Dimmers"))
-                           :variables [(merge {:key "level" :min 0 :max 255 :start 255 :name "Level"})]
-                           :color :orange :end-keys [:dimmers]))
-    (ct/set-cue! (:cue-grid *show*) 3 2
-                 (cues/cue :ws-dimmers (fn [var-map] (dimmer-effect
-                                                      (params/bind-keyword-param (:level var-map 255) Number 255)
-                                                      (show/fixtures-named "ws")
-                                                      :effect-name "Weather System Dimmers"))
-                           :variables [(merge {:key "level" :min 0 :max 255 :start 255 :name "Level"})]
-                           :color :orange :end-keys [:dimmers]))
-
-    (ct/set-cue! (:cue-grid *show*) 4 2
-                 (cues/cue :hex-dimmers (fn [var-map] (dimmer-effect
-                                                       (params/bind-keyword-param (:level var-map 255) Number 255)
-                                                       (show/fixtures-named "hex")
-                                                       :effect-name "Hex Dimmers"))
-                           :variables [(merge {:key "level" :min 0 :max 255 :start 255 :name "Level"})]
-                           :color :orange :end-keys [:dimmers]))
-    (ct/set-cue! (:cue-grid *show*) 5 2
-                 (cues/cue :puck-dimmers (fn [var-map] (dimmer-effect
-                                                        (params/bind-keyword-param (:level var-map 255) Number 255)
-                                                        (show/fixtures-named "puck")
-                                                        :effect-name "Puck Dimmers"))
-                           :variables [(merge {:key "level" :min 0 :max 255 :start 255 :name "Level"})]
-                           :color :orange :end-keys [:dimmers]))
-    (ct/set-cue! (:cue-grid *show*) 6 2
-                 (cues/cue :snowball-dimmers (fn [var-map] (dimmer-effect
-                                                            (params/bind-keyword-param (:level var-map 255) Number 255)
-                                                            (show/fixtures-named "snowball")
-                                                            :effect-name "Snowball Dimmers"))
-                           :variables [(merge {:key "level" :min 0 :max 255 :start 255 :name "Level"})]
-                           :color :orange :end-keys [:dimmers]))
-    (ct/set-cue! (:cue-grid *show*) 7 2
-                 (cues/cue :torrent-1-dimmer (fn [var-map] (dimmer-effect
-                                                            (params/bind-keyword-param (:level var-map 255) Number 255)
-                                                            (show/fixtures-named "torrent-1")
-                                                            :effect-name "Torrent 1 Dimmer"))
-                           :variables [(merge {:key "level" :min 0 :max 255 :start 255 :name "Level"})]
-                           :color :orange :end-keys [:dimmers :torrent-dimmers]))
-
-    ;; Dimmer oscillator cues: Sawtooth down each beat
-    (ct/set-cue! (:cue-grid *show*) 0 3
-                 (cues/cue :dimmers (fn [_] (global-dimmer-effect
-                                             (params/build-oscillated-param (oscillators/sawtooth-beat :down? true))
-                                             :effect-name "All Saw Down Beat"))
-                           :color :yellow :end-keys [:torrent-dimmers :blade-dimmers :ws-dimmers
-                                                     :puck-dimmers :hex-dimmers :snowball-dimmers]))
     (ct/set-cue! (:cue-grid *show*) 1 3
                  (cues/cue :torrent-dimmers
                            (fn [_] (dimmer-effect
