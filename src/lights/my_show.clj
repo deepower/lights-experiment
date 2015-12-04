@@ -34,16 +34,9 @@
   {:channels [(chan/color 1 :red)
               (chan/color 2 :green)
               (chan/color 3 :blue)
-              (chan/functions :dimmer 4
+              (chan/functions :control 4
                 0 {:type :dimmer
                   :label "Dimmer from 0 to 189"
-                  :start 0
-                  :end 189
-                  :range :variable}
-                190 {:type :strobe
-                  :label "Strobe from 190 to 255"
-                  :start 190
-                  :end 255
                   :range :variable})]
    :name "Simple RGB with dimmer"})
 
@@ -124,7 +117,10 @@
 (show/start!)     ; Start sending its DMX frames.
 
 ; Dim all PARs to maximum
-(show/add-effect! :dimmers (global-dimmer-effect 189))
+(show/add-effect! :max-dimmer
+  (afterglow.effects.channel/channel-effect "Max dimmer" 189
+    (afterglow.channels/extract-channels
+      (show/fixtures-named "rgbw") #(= (:type %) :control))))
 
 ; Variable to control lightness level on all PARs
 (show/set-variable! :lightness-level 30)
@@ -172,6 +168,13 @@
   (show/sync-to-external-clock
     (afterglow.midi/sync-to-midi-clock "Network midi-net"))
   )
+
+
+
+(fiat-lux)
+
+; Big list of cues from examples
+; 2DO: learn and delete
 
 (defn blue-on-one
   "Assing blue color to a big PAR"
@@ -316,18 +319,10 @@
                                            :include-color-wheels? true))
                            :short-name "Z Rainbow Grid"))
     (ct/set-cue! (:cue-grid *show*) 6 1
-                 (cues/cue :color (fn [_] (global-color-effect
-                                           (params/build-color-param :s 100 :l 50 :h hue-z-gradient
-                                                                     :adjust-hue hue-bar)))
-                           :short-name "Z Rainbow Grid+Bar"))
-
-    (ct/set-cue! (:cue-grid *show*) 7 1
-                 (cues/cue :color (fn [_] (global-color-effect
-                                           (params/build-color-param :s 100 :l 50 :h hue-gradient
-                                                                     :adjust-hue hue-bar)
-                                           :lights (show/fixtures-named "blade")))
-                           :short-name "Rainbow Blades"))
-
+     (cues/cue :color (fn [_] (global-color-effect
+       (params/build-color-param :s 100 :l 50 :h hue-z-gradient
+                                 :adjust-hue hue-bar)))
+      :short-name "Z Rainbow Grid+Bar"))
 
     ;; TODO: Write a macro to make it easier to bind cue variables.
     (ct/set-cue! (:cue-grid *show*) 0 7
@@ -812,5 +807,3 @@
 
 
 (make-cues)
-
-(fiat-lux)
