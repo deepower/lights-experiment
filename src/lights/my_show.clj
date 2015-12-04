@@ -154,7 +154,7 @@
   "Change light according to sawtooth osc"
   []
   (def light-param (params/build-oscillated-param
-                 (oscillators/sawtooth-beat :beat-ratio 2 :down true) :max 20))
+                 (oscillators/sawtooth-beat :beat-ratio 2 :down? true) :max 20))
   (show/add-effect! :color (global-color-effect
     (params/build-color-param :h 60 :s 100 :l light-param)))
   )
