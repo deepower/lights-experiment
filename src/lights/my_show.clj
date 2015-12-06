@@ -28,7 +28,7 @@
 
 
 ; 2DO: understand how to pack dimmer and strobe into 1 function definition
-(defn my-rgbw
+(defn simple-rgbd
   "A simple RGB with dimmer"
   []
   {:channels [(chan/color 1 :red)
@@ -37,7 +37,9 @@
               (chan/functions :control 4
                 0 {:type :dimmer
                   :label "Dimmer from 0 to 189"
-                  :range :variable})]
+                  :range :variable}
+                190 {:type :strobe
+                  :label "Strobe from 190"})]
    :name "Simple RGB with dimmer"})
 
 (defn my-rgb
@@ -65,9 +67,9 @@
       ;;       to something descriptive and in your own style:
       (show/show :universes [1] :description "Deepower"))))
 
-  (show/patch-fixture! :rgbw-1 (my-rgbw) 1 1 :x 1)
-  (show/patch-fixture! :rgbw-2 (my-rgbw) 1 5 :x 2)
-  (show/patch-fixture! :rgbw-3 (my-rgbw) 1 9 :x 3)
+  (show/patch-fixture! :back-1 (simple-rgbd) 1 1 :x 1)
+  (show/patch-fixture! :back-2 (simple-rgbd) 1 5 :x 2)
+  (show/patch-fixture! :back-3 (simple-rgbd) 1 9 :x 3)
   (show/patch-fixture! :rgb-1 (my-rgb) 1 13  :x 3.5)
 
   ;; Return the show's symbol, rather than the actual map, which gets huge with
