@@ -180,6 +180,14 @@
     (afterglow.midi/sync-to-midi-clock "Network midi-net"))
   )
 
+(defn reset-beat
+  "Reset beat of the show"
+  []
+  (:rhythm/metro-start (:metronome my-show) 1)
+  (:rhythm/metro-bar-start (:metronome my-show) 1)
+  (:rhythm/metro-phase-start (:metronome my-show) 1)
+)
+
 (fiat-lux)
 
 ; Big list of cues from examples
