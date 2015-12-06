@@ -9,6 +9,7 @@
 — from physical controller
 1. Design a plan for cues for the show
 1. Create complimentary colors (3 with 2 near, 3 with 2 opposite, 4 colors)
+1. MIDI button to reset phase
 
 ## Someday
 

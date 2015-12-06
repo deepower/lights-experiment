@@ -153,13 +153,17 @@
   "Main color of the show"
   (afterglow.effects.params/build-color-param :h 120))
 
+(def main-hue
+  "Main hue of the show. This value is used in all effects of the show."
+  120)
+
 (defn light-sawtooth
   "Change light according to sawtooth osc"
   ([beat-ratio]
       (def light-param (params/build-oscillated-param
                      (oscillators/sawtooth-beat :beat-ratio beat-ratio :down? true) :max 20))
       (show/add-effect! :color (global-color-effect
-        (params/build-color-param :h 60 :s 100 :l light-param)))
+        (params/build-color-param :h main-hue :s 100 :l light-param)))
       )
   ([]
     (light-sawtooth 2))
