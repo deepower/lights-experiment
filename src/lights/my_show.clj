@@ -118,11 +118,8 @@
 (core/start-web-server 16000 true)
 (show/start!)     ; Start sending its DMX frames.
 
-; Dim all PARs to maximum
-(show/add-effect! :max-dimmer
-  (afterglow.effects.channel/channel-effect "Max dimmer" 189
-    (afterglow.channels/extract-channels
-      (show/fixtures-named "rgbw") #(= (:type %) :control))))
+; Reset dimmers to full brightness
+(show/add-effect! :dimmers (global-dimmer-effect 255))
 
 ; Variable to control lightness level on all PARs
 (show/set-variable! :lightness-level 30)
