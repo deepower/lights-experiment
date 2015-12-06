@@ -149,6 +149,10 @@
     "midi-net" 1 5 :audio-solo :max 30)
 )
 
+(def main-color
+  "Main color of the show"
+  (afterglow.effects.params/build-color-param :h 120))
+
 (defn light-sawtooth
   "Change light according to sawtooth osc"
   ([beat-ratio]
@@ -160,10 +164,6 @@
   ([]
     (light-sawtooth 2))
 )
-
-(def main-color
-  "Main color of the show"
-  (afterglow.effects.params/build-color-param :h 120))
 
 
 (def light-beat (params/build-oscillated-param
