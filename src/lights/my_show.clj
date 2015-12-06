@@ -193,11 +193,6 @@
 ; Big list of cues from examples
 ; 2DO: learn and delete
 
-(defn blue-on-one
-  "Assing blue color to a big PAR"
-  []
-  (show/add-effect! :color (afterglow.effects.color/color-effect "simple-blue" (params/build-color-param :h 120 :s 100 :l light-param) (show/fixtures-named "rgb-1"))))
-
 (defn global-color-cue
   "Create a cue-grid entry which establishes a global color effect."
   [color x y & {:keys [include-color-wheels? held]}]
