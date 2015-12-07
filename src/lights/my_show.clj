@@ -183,9 +183,7 @@
 (defn reset-beat
   "Reset beat of the show"
   []
-  (:rhythm/metro-start (:metronome my-show) 1)
-  (:rhythm/metro-bar-start (:metronome my-show) 1)
-  (:rhythm/metro-phase-start (:metronome my-show) 1)
+  (afterglow.rhythm/metro-start (:metronome *show*) 1)
 )
 
 (fiat-lux)
