@@ -149,29 +149,24 @@
     "midi-net" 1 5 :audio-solo :max 30)
 )
 
-(def main-color
-  "Main color of the show"
-  (afterglow.effects.params/build-color-param :h 120))
+; Main hue, which is used in the show
+(afterglow.show/set-variable! :main-hue 0)
 
-(def main-hue
-  "Main hue of the show. This value is used in all effects of the show."
-  120)
+; Max lightness in the show
+(afterglow.show/set-variable! :max-lightness 50)
+
+; Osc beat ratio, isn't working yet with oscillators, but hope isn't lost
+(afterglow.show/set-variable! :osc-beat-ratio 4)
 
 (defn light-sawtooth
   "Change light according to sawtooth osc"
-  ([beat-ratio]
-    (def light-param (params/build-oscillated-param
-      (oscillators/sawtooth-beat :beat-ratio beat-ratio :down? true) :max 20))
+  [beat-ratio]
+  (let [light-param (params/build-oscillated-param
+    (oscillators/sawtooth-beat :beat-ratio beat-ratio :down? true) :max :max-lightness)]
     (show/add-effect! :color (global-color-effect
-      (params/build-color-param :h main-hue :s 100 :l light-param)))
-    )
-  ([]
-    (light-sawtooth 2))
+      (params/build-color-param :h :main-hue :s 100 :l light-param)))
+  )
 )
-
-
-(def light-beat (params/build-oscillated-param
-                 (oscillators/square-beat) :max 20))
 
 (defn sync-midi-clock
   "Sync MIDI clock to Ableton live session over network"
@@ -195,8 +190,8 @@
   "Create a cue-grid entry which establishes a global color effect."
   [color x y & {:keys [include-color-wheels? held]}]
   (let [cue (cues/cue :color (fn [_] (global-color-effect color :include-color-wheels? include-color-wheels?))
-                      :held held
-                      :color (create-color color))]
+    :held held
+    :color (create-color color))]
     (ct/set-cue! (:cue-grid *show*) x y cue)))
 
 
@@ -336,13 +331,13 @@
 
     ;; TODO: Write a macro to make it easier to bind cue variables.
     (ct/set-cue! (:cue-grid *show*) 0 7
-                 (cues/cue :sparkle (fn [var-map] (fun/sparkle (show/all-fixtures)
-                                                               :chance (:chance var-map 0.05)
-                                                               :fade-time (:fade-time var-map 50)))
-                           :held true
-                           :priority 100
-                           :variables [{:key "chance" :min 0.0 :max 0.4 :start 0.05 :velocity true}
-                                       {:key "fade-time" :name "Fade" :min 1 :max 2000 :start 50 :type :integer}]))
+      (cues/cue :sparkle (fn [var-map] (fun/sparkle (show/all-fixtures)
+        :chance (:chance var-map 0.05)
+        :fade-time (:fade-time var-map 50)))
+          :held true
+          :priority 100
+          :variables [{:key "chance" :min 0.0 :max 0.4 :start 0.05 :velocity true}
+            {:key "fade-time" :name "Fade" :min 1 :max 2000 :start 50 :type :integer}]))
 
     (ct/set-cue! (:cue-grid *show*) 2 7
                  (cues/cue :transform-colors (fn [_] (color-fx/transform-colors (show/all-fixtures)))
