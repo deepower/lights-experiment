@@ -42,8 +42,8 @@
                   :label "Strobe from 190"})]
    :name "Simple RGB with dimmer"})
 
-(defn my-rgb
-  "A simple RGB light"
+(defn rgb-arch
+  "A simple RGB light from achitecture"
   []
   {:channels [(chan/color 1 :red)
               (chan/color 2 :green)
@@ -70,7 +70,7 @@
   (show/patch-fixture! :back-1 (simple-rgbd) 1 1 :x 1)
   (show/patch-fixture! :back-2 (simple-rgbd) 1 5 :x 2)
   (show/patch-fixture! :back-3 (simple-rgbd) 1 9 :x 3)
-  (show/patch-fixture! :rgb-1 (my-rgb) 1 13  :x 3.5)
+  (show/patch-fixture! :front-1 (rgb-arch) 1 13  :x 3.5)
 
   ;; Return the show's symbol, rather than the actual map, which gets huge with
   ;; all the expanded, patched fixtures in it.
@@ -115,20 +115,11 @@
                     (afterglow.effects.channel/function-effect
                      "Torrents Open" :shutter-open 50 (show/fixtures-named "torrent"))))
 
-(core/start-web-server 16000 true)
+(core/start-web-server 16000 false)
 (show/start!)     ; Start sending its DMX frames.
 
 ; Reset dimmers to full brightness
 (show/add-effect! :dimmers (global-dimmer-effect 255))
-
-; Variable to control lightness level on all PARs
-(show/set-variable! :lightness-level 30)
-(show/add-effect! :color (global-color-effect
-  (params/build-color-param :h 60 :s 100 :l :lightness-level)))
-
-; Oscillation of hue, temporary removed
-;(def hue-param (params/build-oscillated-param
-;                 (oscillators/sawtooth-bar) :max 360))
 
 (defn bind-midi
   "Bind MIDI devices"
