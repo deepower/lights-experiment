@@ -160,9 +160,19 @@
 )
 
 (defn light-sawtooth-phase
-  "Change light of fixtures with phase shift"
+  "Change light of fixtures with phase shift. WIP."
   [beat-ratio]
+  (let [phase-gradient (params/build-spatial-param  ; Spread a phase shift across fixtures
+      (show/all-fixtures)
+      (fn [head] (- (:x head) (:min-x @(:dimensions *show*)))) :max 1)]
+    (let [light-param (params/build-oscillated-param
+      (oscillators/sawtooth-beat :beat-ratio beat-ratio :down? true :phase phase-gradient) :max :max-lightness)]
+      (show/add-effect! :color (global-color-effect
+        (params/build-color-param :s 100 :l light-param :h :main-hue))
+      )
+    )
   )
+)
 
 (defn sync-midi-clock
   "Sync MIDI clock to Ableton live session over network"
