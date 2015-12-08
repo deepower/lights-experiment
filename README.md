@@ -2,7 +2,6 @@
 
 1. Pulse with sine with beat with phase switch with single color
 1. Change intensity of pulse (width of the pulse) with MIDI
-1. Change max amplitude of pulse with variable
 1. Find way to control variable with many sources. Override with last setting came.
 — from console
 — from network MIDI
