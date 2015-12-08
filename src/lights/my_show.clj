@@ -50,6 +50,25 @@
               (chan/color 3 :blue)]
    :name "Simple RGB"})
 
+(defn rgbd-simple
+  "A simple RGBD from London pub"
+  []
+  {:channels [(chan/color 1 :red)
+              (chan/color 2 :green)
+              (chan/color 3 :blue)
+              (chan/functions :dimmer 4)]
+    })
+
+(defn rgbw-simple
+  "A simple RGBW from London pub"
+  []
+  {:channels [(chan/color 1 :red)
+              (chan/color 2 :green)
+              (chan/color 3 :blue)
+              (chan/color 4 :white)]
+    })
+
+
 (defn use-my-show
   "Set up the show on the OLA universes it actually needs."
   []
@@ -65,7 +84,7 @@
       ;;       your show needs to use if they are different than
       ;;       just universe 1, as below, and change the description
       ;;       to something descriptive and in your own style:
-      (show/show :universes [1] :description "Deepower"))))
+      (show/show :universes [1] :description "Accuraten"))))
 
   (show/patch-fixture! :back-1 (simple-rgbd) 1 1 :x 1)
   (show/patch-fixture! :back-2 (simple-rgbd) 1 5 :x 2)
@@ -76,7 +95,32 @@
   ;; all the expanded, patched fixtures in it.
   '*show*)
 
-(use-my-show)  ; Set up my show as the default show, using the function above.
+(defn use-london-show
+  "Show for the London club"
+  []
+  (set-default-show!
+    (swap! my-show (fn [s]
+      (when s
+        (show/unregister-show s)
+        (with-show s (show/stop!)))
+      ;; TODO: Edit this to list the actual OLA universe(s) that
+      ;;       your show needs to use if they are different than
+      ;;       just universe 1, as below, and change the description
+      ;;       to something descriptive and in your own style:
+      (show/show :universes [1] :description "London"))))
+
+  (show/patch-fixture! :front-1 (rgbd-simple) 1 1   :x 2)
+  (show/patch-fixture! :front-2 (rgbd-simple) 1 17  :x 3.5)
+
+  (show/patch-fixture! :scene-1 (rgbw-simple) 1 33  :x 0)
+
+  ;; Return the show's symbol, rather than the actual map, which gets huge with
+  ;; all the expanded, patched fixtures in it.
+  '*show*)
+
+;(use-my-show)  ; Set up my show as the default show, using the function above.
+
+(use-london-show)
 
 (defn global-color-effect
   "Make a color effect which affects all lights in the sample show.
@@ -154,6 +198,16 @@
   [beat-ratio]
   (let [light-param (params/build-oscillated-param
     (oscillators/sawtooth-beat :beat-ratio beat-ratio :down? true) :max :max-lightness)]
+    (show/add-effect! :color (global-color-effect
+      (params/build-color-param :h :main-hue :s 100 :l light-param)))
+  )
+)
+
+(defn light-sine
+  "Change light according to sine osc"
+  [beat-ratio]
+  (let [light-param (params/build-oscillated-param
+    (oscillators/sine-beat :beat-ratio beat-ratio :down? true) :max :max-lightness)]
     (show/add-effect! :color (global-color-effect
       (params/build-color-param :h :main-hue :s 100 :l light-param)))
   )
