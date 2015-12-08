@@ -159,6 +159,11 @@
   )
 )
 
+(defn light-sawtooth-phase
+  "Change light of fixtures with phase shift"
+  [beat-ratio]
+  )
+
 (defn sync-midi-clock
   "Sync MIDI clock to Ableton live session over network"
   []
@@ -263,16 +268,16 @@
 (defn make-cues
   "Create cues."
   []
-    (let [hue-bar (params/build-oscillated-param  ; Spread a rainbow across a bar of music
+  (let [hue-bar (params/build-oscillated-param  ; Spread a rainbow across a bar of music
                  (oscillators/sawtooth-bar) :max 360)
-        desat-beat (params/build-oscillated-param  ; Desaturate a color as a beat progresses
-                    (oscillators/sawtooth-beat :down? true) :max 100)
-        hue-gradient (params/build-spatial-param  ; Spread a rainbow across the light grid
-                      (show/all-fixtures)
-                      (fn [head] (- (:x head) (:min-x @(:dimensions *show*)))) :max 360)
-        hue-z-gradient (params/build-spatial-param  ; Spread a rainbow across the light grid front to back
-                        (show/all-fixtures)
-                        (fn [head] (- (:z head) (:min-z @(:dimensions *show*)))) :max 360)]
+    desat-beat (params/build-oscillated-param  ; Desaturate a color as a beat progresses
+                (oscillators/sawtooth-beat :down? true) :max 100)
+    hue-gradient (params/build-spatial-param  ; Spread a rainbow across the light grid
+      (show/all-fixtures)
+      (fn [head] (- (:x head) (:min-x @(:dimensions *show*)))) :max 360)
+    hue-z-gradient (params/build-spatial-param  ; Spread a rainbow across the light grid front to back
+      (show/all-fixtures)
+      (fn [head] (- (:z head) (:min-z @(:dimensions *show*)))) :max 360)]
 
   (global-color-cue "red" 0 0 :include-color-wheels? true)
   (global-color-cue "orange" 1 0 :include-color-wheels? true)
@@ -297,12 +302,12 @@
                            :variables [{:key :rainbow-saturation :name "Saturatn" :min 0 :max 100 :start 100
                                         :type :integer}]))
     (ct/set-cue! (:cue-grid *show*) 2 1
-                 (cues/cue :color (fn [_] (global-color-effect
-                                           (params/build-color-param :s :rainbow-saturation :l 50 :h hue-gradient
-                                                                     :adjust-hue hue-bar)))
-                           :short-name "Rainbow Grid+Bar"
-                           :variables [{:key :rainbow-saturation :name "Saturatn" :min 0 :max 100 :start 100
-                                        :type :integer}]))
+      (cues/cue :color (fn [_] (global-color-effect
+        (params/build-color-param :s :rainbow-saturation :l 50 :h hue-gradient
+          :adjust-hue hue-bar)))
+            :short-name "Rainbow Grid+Bar"
+            :variables [{:key :rainbow-saturation :name "Saturatn" :min 0 :max 100 :start 100
+              :type :integer}]))
     (ct/set-cue! (:cue-grid *show*) 3 1  ; Desaturate the rainbow as each beat progresses
                  (cues/cue :color (fn [_] (global-color-effect
                                            (params/build-color-param :s desat-beat :l 50 :h hue-gradient
@@ -418,57 +423,6 @@
                                     (params/build-oscillated-param (oscillators/sawtooth-beat :beat-ratio 2))
                                     (show/fixtures-named "snowball") :effect-name "Snowball Saw Up 2 Beat"))
                            :color :orange :end-keys [:dimmers]))
-
-    ;; Dimmer oscillator cues: Sine over a bar
-    (ct/set-cue! (:cue-grid *show*) 0 5
-                 (cues/cue :dimmers (fn [_] (global-dimmer-effect
-                                             (params/build-oscillated-param (oscillators/sine-bar) :min 1)
-                                             :effect-name "All Sine Bar"))
-                           :color :cyan :end-keys [:torrent-dimmers :blade-dimmers :ws-dimmers
-                                                   :puck-dimmers :hex-dimmers :snowball-dimmers]))
-    (ct/set-cue! (:cue-grid *show*) 1 5
-                 (cues/cue :torrent-dimmers
-                           (fn [_] (dimmer-effect
-                                    (params/build-oscillated-param (oscillators/sine-bar) :min 1)
-                                    (show/fixtures-named "torrent") :effect-name "Torrent Sine Bar"))
-                           :color :blue :end-keys [:dimmers]))
-    (ct/set-cue! (:cue-grid *show*) 2 5
-                 (cues/cue :blade-dimmers
-                           (fn [_] (dimmer-effect
-                                    (params/build-oscillated-param (oscillators/sine-bar) :min 1)
-                                    (show/fixtures-named "blade") :effect-name "Blade Sine Bar"))
-                           :color :blue :end-keys [:dimmers]))
-    (ct/set-cue! (:cue-grid *show*) 3 5
-                 (cues/cue :ws-dimmers
-                           (fn [_] (dimmer-effect
-                                    (params/build-oscillated-param (oscillators/sine-bar) :min 1)
-                                    (show/fixtures-named "ws") :effect-name "WS Sine Bar"))
-                           :color :blue :end-keys [:dimmers]))
-    (ct/set-cue! (:cue-grid *show*) 4 5
-                 (cues/cue :hex-dimmers
-                           (fn [_] (dimmer-effect
-                                    (params/build-oscillated-param (oscillators/sine-bar) :min 1)
-                                    (show/fixtures-named "hex") :effect-name "Hex Sine Bar"))
-                           :color :blue :end-keys [:dimmers]))
-    (ct/set-cue! (:cue-grid *show*) 5 5
-                 (cues/cue :puck-dimmers
-                           (fn [_] (dimmer-effect
-                                    (params/build-oscillated-param (oscillators/sine-bar) :min 1)
-                                    (show/fixtures-named "puck") :effect-name "Puck Sine Bar"))
-                           :color :blue :end-keys [:dimmers]))
-    (ct/set-cue! (:cue-grid *show*) 6 5
-                 (cues/cue :snowball-dimmers
-                           (fn [_] (dimmer-effect
-                                    (params/build-oscillated-param (oscillators/sine-bar) :min 1)
-                                    (show/fixtures-named "snowball") :effect-name "Snowball Sine Bar"))
-                           :color :blue :end-keys [:dimmers]))
-    (ct/set-cue! (:cue-grid *show*) 7 5
-                 (cues/cue :dimmers
-                           (fn [_] (dimmer-effect
-                                    (params/build-oscillated-param (oscillators/triangle-bar) :min 1)
-                                    (show/all-fixtures) :effect-name "All Triangle Bar"))
-                           :color :red :end-keys [:torrent-dimmers :blade-dimmers :ws-dimmers
-                                                  :puck-dimmers :hex-dimmers :snowball-dimmers]))
 
     ;; Strobe cues
     (make-strobe-cue "All" (show/all-fixtures) 0 6)
