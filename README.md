@@ -10,6 +10,8 @@
 1. Create complimentary colors (3 with 2 near, 3 with 2 opposite, 4 colors)
 1. MIDI button to reset phase
 
+CHO: All is black, strobe with random light
+
 ## Someday
 
 1. Try Strobe with Quneo https://github.com/brunchboy/afterglow/blob/master/doc/effects.adoc#strobe

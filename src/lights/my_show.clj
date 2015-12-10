@@ -68,6 +68,26 @@
               (chan/color 4 :white)]
     })
 
+(defn jb-systems-sirius
+  "JB SYSTEMS - Lyre Sirius 60W"
+  []
+  {:channels [(chan/pan 1)
+              (chan/tilt 3)
+              (chan/dimmer 6)
+              (chan/functions :shutter 7 0 "Shutter Closed" 255 "Shutter Open")
+              ]
+    })
+
+(defn jb-systems-sirius-8ch
+  "JB SYSTEMS - Lyre Sirius 60W"
+  []
+  {:channels [(chan/pan 1)
+              (chan/tilt 3)
+              (chan/functions :shutter 3 0 "Shutter Closed" 255 "Shutter Open")
+              (chan/dimmer 7)
+              ]
+    })
+
 
 (defn use-my-show
   "Set up the show on the OLA universes it actually needs."
@@ -113,6 +133,11 @@
   (show/patch-fixture! :front-2 (rgbd-simple) 1 17  :x 3.5)
 
   (show/patch-fixture! :scene-1 (rgbw-simple) 1 33  :x 0)
+
+  (show/patch-fixture! :head-1 (jb-systems-sirius-8ch) 1 49 :x 3.5)
+  (show/patch-fixture! :head-2 (jb-systems-sirius-8ch) 1 65 :x 3.5)
+  (show/patch-fixture! :head-3 (jb-systems-sirius-8ch) 1 81 :x 3.5)
+  (show/patch-fixture! :head-4 (jb-systems-sirius-8ch) 1 97 :x 3.5)
 
   ;; Return the show's symbol, rather than the actual map, which gets huge with
   ;; all the expanded, patched fixtures in it.
@@ -242,6 +267,17 @@
 )
 
 (fiat-lux)
+
+(defn shutter-open
+  "Open shutters"
+  []
+  (show/add-effect! :shutter
+    (afterglow.effects.channel/channel-effect "Shutter" 255
+      (afterglow.channels/extract-channels
+        (show/fixtures-named "head") #(= (:type %) :shutter))))
+)
+
+(shutter-open)
 
 ; Big list of cues from examples
 ; 2DO: learn and delete
