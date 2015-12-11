@@ -381,6 +381,13 @@
   step-param
   (atom nil))
 
+(defn new-cues
+  "Create cues."
+  []
+  (ct/set-cue! (:cue-grid *show*) 0 17
+    (cues/function-cue :strobe-all :strobe (show/all-fixtures) :effect-name "A new cue"))
+)
+
 (defn make-cues
   "Create cues."
   []
