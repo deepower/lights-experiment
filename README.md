@@ -15,7 +15,6 @@ CHO: All is black, strobe with random light
 ## Someday
 
 1. Try Strobe with Quneo https://github.com/brunchboy/afterglow/blob/master/doc/effects.adoc#strobe
-1. Import HI/MID/LOW levels from Ableton as MIDI CC
 
 ## DMX description
 

@@ -143,9 +143,9 @@
   ;; all the expanded, patched fixtures in it.
   '*show*)
 
-;(use-my-show)  ; Set up my show as the default show, using the function above.
+(use-my-show)  ; Set up my show as the default show, using the function above.
 
-(use-london-show)
+;(use-london-show)
 
 (defn global-color-effect
   "Make a color effect which affects all lights in the sample show.
@@ -197,16 +197,16 @@
     "Traktor Kontrol Z1 Input" 0 4 :knob-1 :max 360)
 
   (show/add-midi-control-to-var-mapping
-    "midi-net" 1 1 :audio-drums :max 30)
+    "midi-net" 0 0 :audio-drums :max 30)
 
   (show/add-midi-control-to-var-mapping
-    "midi-net" 1 2 :audio-bass :max 30)
+    "midi-net" 0 2 :audio-bass :max 30)
 
   (show/add-midi-control-to-var-mapping
-    "midi-net" 1 3 :audio-percussion :min 10 :max 30)
+    "midi-net" 0 3 :audio-percussion :min 10 :max 30)
 
   (show/add-midi-control-to-var-mapping
-    "midi-net" 1 5 :audio-solo :max 30)
+    "midi-net" 0 5 :audio-solo :max 30)
 )
 
 ; Main hue, which is used in the show
@@ -253,11 +253,24 @@
   )
 )
 
+(defn light-sawtooth-color
+  "Change light according to sawtooth osc & hue phase"
+  [beat-ratio]
+  (let [light-param (params/build-oscillated-param
+    (oscillators/sawtooth-beat :beat-ratio beat-ratio :down? true) :max :max-lightness)
+        hue-param (params/build-oscillated-param
+    (oscillators/square-beat :beat-ratio (* beat-ratio 4) :down? true) :max 60)
+  ]
+    (show/add-effect! :color (global-color-effect
+      (params/build-color-param :h :main-hue :s 100 :l light-param :adjust-hue hue-param)))
+  )
+)
+
 (defn sync-midi-clock
-  "Sync MIDI clock to Ableton live session over network"
+  "Sync MIDI clock to Ableton live session over USB Uno"
   []
   (show/sync-to-external-clock
-    (afterglow.midi/sync-to-midi-clock "Network midi-net"))
+    (afterglow.midi/sync-to-midi-clock "USB Uno MIDI Interface"))
   )
 
 (defn reset-beat
