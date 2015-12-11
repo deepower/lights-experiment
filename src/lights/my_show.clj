@@ -225,8 +225,13 @@
     )
 )
 
-; Main hue, which is used in the show
-(afterglow.show/set-variable! :main-hue 0)
+(defn set-hue
+  "Set main hue"
+  [hue]
+  (afterglow.show/set-variable! :main-hue hue)
+)
+
+(set-hue 0)
 
 ; Max lightness in the show
 (afterglow.show/set-variable! :max-lightness 50)
