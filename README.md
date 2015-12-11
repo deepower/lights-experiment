@@ -1,6 +1,6 @@
 ## 2DO
 
-1. Pulse with sine with beat with phase switch with single color
+1. bind-midi variables, that have :maximum linked to :max-lightness
 1. Change intensity of pulse (width of the pulse) with MIDI
 1. Find way to control variable with many sources. Override with last setting came.
 — from console

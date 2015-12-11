@@ -210,6 +210,12 @@
 
       (show/add-midi-control-to-var-mapping
         "USB Uno MIDI Interface" 9 2 :audio-solo :max 50)
+
+      (show/add-midi-control-to-var-mapping
+        "USB Uno MIDI Interface" 9 3 :audio-voice :max 50)
+
+      (show/add-midi-control-to-var-mapping
+        "USB Uno MIDI Interface" 9 4 :audio-percussion :max 50)
     )
   )
 
@@ -242,7 +248,7 @@
   "Change light according to sine osc"
   [beat-ratio]
   (let [light-param (params/build-oscillated-param
-    (oscillators/sine-beat :beat-ratio beat-ratio :down? true) :max :max-lightness)]
+    (oscillators/sine-beat :beat-ratio beat-ratio :down? true :phase 0.5) :max :max-lightness)]
     (show/add-effect! :color (global-color-effect
       (params/build-color-param :h :main-hue :s 100 :l light-param)))
   )
@@ -273,6 +279,19 @@
   ]
     (show/add-effect! :color (global-color-effect
       (params/build-color-param :h :main-hue :s 100 :l light-param :adjust-hue hue-param)))
+  )
+)
+
+(defn light-to-param
+  "Change light according to dynamic parameter"
+  [param]
+  (let [light-param (params/build-oscillated-param
+    (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :max :max-lightness)
+        hue-param (params/build-oscillated-param
+    (oscillators/square-beat :beat-ratio 8 :down? true) :max 90)
+  ]
+    (show/add-effect! :color (global-color-effect
+      (params/build-color-param :h :main-hue :s 100 :l param)))
   )
 )
 
