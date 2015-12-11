@@ -203,7 +203,7 @@
   (if (= interface "uno")
     (do
       (show/add-midi-control-to-var-mapping
-        "USB Uno MIDI Interface" 9 0 :audio-drums :max 50)
+        "USB Uno MIDI Interface" 9 0 :audio-drums :min -10 :max 50)
 
       (show/add-midi-control-to-var-mapping
         "USB Uno MIDI Interface" 9 1 :audio-bass :max 50)
@@ -212,7 +212,7 @@
         "USB Uno MIDI Interface" 9 2 :audio-solo :max 50)
 
       (show/add-midi-control-to-var-mapping
-        "USB Uno MIDI Interface" 9 3 :audio-voice :max 50)
+        "USB Uno MIDI Interface" 9 3 :audio-voice :min -120 :max 50)
 
       (show/add-midi-control-to-var-mapping
         "USB Uno MIDI Interface" 9 4 :audio-percussion :max 50)
