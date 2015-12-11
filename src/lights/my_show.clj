@@ -190,23 +190,33 @@
 ; Reset dimmers to full brightness
 (show/add-effect! :dimmers (global-dimmer-effect 255))
 
+; 2DO rewrite to connect multiple devices
 (defn bind-midi
   "Bind MIDI devices"
-  []
-  (show/add-midi-control-to-var-mapping
-    "Traktor Kontrol Z1 Input" 0 4 :knob-1 :max 360)
+  [interface]
 
-  (show/add-midi-control-to-var-mapping
-    "midi-net" 0 0 :audio-drums :max 30)
+  (if (= interface "z1")
+    (show/add-midi-control-to-var-mapping
+      "Traktor Kontrol Z1 Input" 0 4 :knob-1 :max 360)
+  )
 
-  (show/add-midi-control-to-var-mapping
-    "midi-net" 0 2 :audio-bass :max 30)
+  (if (= interface "uno")
+    (do
+      (show/add-midi-control-to-var-mapping
+        "USB Uno MIDI Interface" 9 0 :audio-drums :max 50)
 
-  (show/add-midi-control-to-var-mapping
-    "midi-net" 0 3 :audio-percussion :min 10 :max 30)
+      (show/add-midi-control-to-var-mapping
+        "USB Uno MIDI Interface" 9 1 :audio-bass :max 50)
 
-  (show/add-midi-control-to-var-mapping
-    "midi-net" 0 5 :audio-solo :max 30)
+      (show/add-midi-control-to-var-mapping
+        "USB Uno MIDI Interface" 9 2 :audio-solo :max 50)
+    )
+  )
+
+  (if (= interface "uno-clock")
+    (show/sync-to-external-clock
+      (afterglow.midi/sync-to-midi-clock "USB Uno MIDI Interface"))
+    )
 )
 
 ; Main hue, which is used in the show
@@ -259,19 +269,12 @@
   (let [light-param (params/build-oscillated-param
     (oscillators/sawtooth-beat :beat-ratio beat-ratio :down? true) :max :max-lightness)
         hue-param (params/build-oscillated-param
-    (oscillators/square-beat :beat-ratio (* beat-ratio 4) :down? true) :max 60)
+    (oscillators/square-beat :beat-ratio (* beat-ratio 2) :down? true) :max 90)
   ]
     (show/add-effect! :color (global-color-effect
       (params/build-color-param :h :main-hue :s 100 :l light-param :adjust-hue hue-param)))
   )
 )
-
-(defn sync-midi-clock
-  "Sync MIDI clock to Ableton live session over USB Uno"
-  []
-  (show/sync-to-external-clock
-    (afterglow.midi/sync-to-midi-clock "USB Uno MIDI Interface"))
-  )
 
 (defn reset-beat
   "Reset beat of the show"
