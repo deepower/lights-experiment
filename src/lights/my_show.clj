@@ -241,9 +241,9 @@
 
 (defn light-sawtooth
   "Change light according to sawtooth osc"
-  [beat-ratio]
+  []
   (let [light-param (params/build-oscillated-param
-    (oscillators/sawtooth-beat :beat-ratio beat-ratio :down? true) :max :max-lightness)]
+    (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :max :max-lightness)]
     (show/add-effect! :color (global-color-effect
       (params/build-color-param :h :main-hue :s 100 :l light-param)))
   )
@@ -253,7 +253,7 @@
   "Change light according to sine osc"
   [beat-ratio]
   (let [light-param (params/build-oscillated-param
-    (oscillators/sine-beat :beat-ratio beat-ratio :down? true :phase 0.5) :max :max-lightness)]
+    (oscillators/sine-beat :beat-ratio :osc-beat-ratio :down? true :phase 0.5) :max :max-lightness)]
     (show/add-effect! :color (global-color-effect
       (params/build-color-param :h :main-hue :s 100 :l light-param)))
   )
@@ -261,12 +261,12 @@
 
 (defn light-sawtooth-phase
   "Change light of fixtures with phase shift. WIP."
-  [beat-ratio]
+  []
   (let [phase-gradient (params/build-spatial-param  ; Spread a phase shift across fixtures
       (show/all-fixtures)
       (fn [head] (- (:x head) (:min-x @(:dimensions *show*)))) :max 1)]
     (let [light-param (params/build-oscillated-param
-      (oscillators/sawtooth-beat :beat-ratio beat-ratio :down? true :phase phase-gradient) :max :max-lightness)]
+      (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true :phase phase-gradient) :max :max-lightness)]
       (show/add-effect! :color (global-color-effect
         (params/build-color-param :s 100 :l light-param :h :main-hue))
       )
@@ -276,11 +276,11 @@
 
 (defn light-sawtooth-color
   "Change light according to sawtooth osc & hue phase"
-  [beat-ratio]
+  []
   (let [light-param (params/build-oscillated-param
-    (oscillators/sawtooth-beat :beat-ratio beat-ratio :down? true) :max :max-lightness)
+    (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :max :max-lightness)
         hue-param (params/build-oscillated-param
-    (oscillators/square-beat :beat-ratio (* beat-ratio 2) :down? true) :max 90)
+    (oscillators/square-beat :beat-ratio 16 :down? true) :max 90)
   ]
     (show/add-effect! :color (global-color-effect
       (params/build-color-param :h :main-hue :s 100 :l light-param :adjust-hue hue-param)))
@@ -293,7 +293,7 @@
   (let [light-param (params/build-oscillated-param
     (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :max :max-lightness)
         hue-param (params/build-oscillated-param
-    (oscillators/square-beat :beat-ratio 8 :down? true) :max 90)
+    (oscillators/square-beat :beat-ratio 16 :down? true) :max 90)
   ]
     (show/add-effect! :color (global-color-effect
       (params/build-color-param :h :main-hue :s 100 :l param)))
