@@ -410,6 +410,12 @@
   []
   (ct/set-cue! (:cue-grid *show*) 0 17
     (cues/function-cue :strobe-all :strobe (show/all-fixtures) :effect-name "A new cue"))
+
+  (ct/set-cue! (:cue-grid *show*) 0 18
+    (afterglow.effects/scene "Blue Sparks"
+      (global-color-effect :blue)
+      (fun/sparkle (show/all-fixtures) :chance 0.07 :fade-time 500))
+    )
 )
 
 (defn make-cues
