@@ -92,18 +92,11 @@
 (defn use-my-show
   "Set up the show on the OLA universes it actually needs."
   []
-
-  ;; Create, or re-create the show. Make it the default show so we don't
-  ;; need to wrap everything below in a (with-show sample-show ...) binding.
   (set-default-show!
     (swap! my-show (fn [s]
       (when s
         (show/unregister-show s)
         (with-show s (show/stop!)))
-      ;; TODO: Edit this to list the actual OLA universe(s) that
-      ;;       your show needs to use if they are different than
-      ;;       just universe 1, as below, and change the description
-      ;;       to something descriptive and in your own style:
       (show/show :universes [1] :description "Accuraten"))))
 
   (show/patch-fixture! :back-1 (simple-rgbd) 1 1 :x 1)
@@ -123,10 +116,7 @@
       (when s
         (show/unregister-show s)
         (with-show s (show/stop!)))
-      ;; TODO: Edit this to list the actual OLA universe(s) that
-      ;;       your show needs to use if they are different than
-      ;;       just universe 1, as below, and change the description
-      ;;       to something descriptive and in your own style:
+
       (show/show :universes [1] :description "London"))))
 
   (show/patch-fixture! :front-1 (rgbd-simple) 1 1   :x 1.6  :y 3.5 :z 2.6)
@@ -134,14 +124,10 @@
 
   (show/patch-fixture! :scene-side-1 (rgbw-simple) 1 33  :x 0 :y 1.7 :z 1.5)
 
-  (show/patch-fixture! :head-1 (jb-systems-sirius-8ch) 1 49 :x 3.5  :y 7  :z 2.8 
-     :x-rotation (tf/degrees -135))
-  (show/patch-fixture! :head-2 (jb-systems-sirius-8ch) 1 65 :x 3.5  :y 7  :z 2.8 
-     :x-rotation (tf/degrees -135))
-  (show/patch-fixture! :head-3 (jb-systems-sirius-8ch) 1 81 :x 3.5  :y 7  :z 2.8 
-     :x-rotation (tf/degrees -135))
-  (show/patch-fixture! :head-4 (jb-systems-sirius-8ch) 1 97 :x 3.5  :y 7  :z 2.8 
-     :x-rotation (tf/degrees -135))
+  (show/patch-fixture! :head-1 (jb-systems-sirius-8ch) 1 49 :x 3.5  :y 7  :z 2.8)
+  (show/patch-fixture! :head-2 (jb-systems-sirius-8ch) 1 65 :x 3.5  :y 7  :z 2.8)
+  (show/patch-fixture! :head-3 (jb-systems-sirius-8ch) 1 81 :x 3.5  :y 7  :z 2.8)
+  (show/patch-fixture! :head-4 (jb-systems-sirius-8ch) 1 97 :x 3.5  :y 7  :z 2.8)
 
   (show/patch-fixture! :back-1 (simple-rgbd) 1 113 :x -1.757 :y 0.325 :z 0.3)
   (show/patch-fixture! :back-2 (simple-rgbd) 1 117 :x -1.057 :y 0.325 :z 0.3)
@@ -154,7 +140,7 @@
   ;; all the expanded, patched fixtures in it.
   '*show*)
 
-(use-my-show)  ; Set up my show as the default show, using the function above.
+(use-my-show)
 
 ;(use-london-show)
 
