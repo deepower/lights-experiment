@@ -427,11 +427,11 @@
 
   (ct/set-cue! (:cue-grid *show*) 0 17
     (cues/cue :color  (fn [_] (afterglow.effects/scene
-      "Blue and red"
-        (show/add-effect! :color-back-odd (afterglow.effects.color/color-effect
-          "Plain red" (create-color "red") (show/fixtures-named "back-odd")))
-        (show/add-effect! :color-back-even (afterglow.effects.color/color-effect
-          "Plain Blue" (create-color "blue") (show/fixtures-named "back-even")))
+      "Blue and red 2"
+        (afterglow.effects.color/color-effect
+          "Plain red" (create-color "red") (show/fixtures-named "back-odd"))
+        (afterglow.effects.color/color-effect
+          "Plain Blue" (create-color "blue") (show/fixtures-named "back-even"))
     ))))
 )
 
