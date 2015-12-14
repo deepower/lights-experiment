@@ -99,9 +99,9 @@
         (with-show s (show/stop!)))
       (show/show :universes [1] :description "Accuraten"))))
 
-  (show/patch-fixture! :back-1 (simple-rgbd) 1 1 :x 1)
-  (show/patch-fixture! :back-2 (simple-rgbd) 1 5 :x 2)
-  (show/patch-fixture! :back-3 (simple-rgbd) 1 9 :x 3)
+  (show/patch-fixture! :back-odd-1 (simple-rgbd) 1 1 :x 1)
+  (show/patch-fixture! :back-even-2 (simple-rgbd) 1 5 :x 2)
+  (show/patch-fixture! :back-odd-3 (simple-rgbd) 1 9 :x 3)
   (show/patch-fixture! :front-1 (rgb-arch) 1 13  :x 3.5)
 
   ;; Return the show's symbol, rather than the actual map, which gets huge with
@@ -297,6 +297,17 @@
   )
 )
 
+(defn separate-colors
+  "Asign different colors to different fixtures. Experiment."
+  []
+  (afterglow.effects/scene "Different colors"
+    (show/add-effect! :color (afterglow.effects.color/color-effect
+      "Plain red" (create-color "red") (show/fixtures-named "back-odd")))
+    (show/add-effect! :color (afterglow.effects.color/color-effect
+      "Plain Blue" (create-color "blue") (show/fixtures-named "back-even")))
+    )
+  )
+
 (defn reset-beat
   "Reset beat of the show"
   []
@@ -405,14 +416,23 @@
 (defn new-cues
   "Create cues."
   []
-  (ct/set-cue! (:cue-grid *show*) 0 17
-    (cues/function-cue :strobe-all :strobe (show/all-fixtures) :effect-name "A new cue"))
 
-  (ct/set-cue! (:cue-grid *show*) 0 18
-    (afterglow.effects/scene "Blue Sparks"
+  (ct/set-cue! (:cue-grid *show*) 0 16
+    (cues/cue :color  (fn [_] (afterglow.effects/scene
+      "Blue Sparks"
       (global-color-effect :blue)
-      (fun/sparkle (show/all-fixtures) :chance 0.07 :fade-time 500))
-    )
+      (fun/sparkle (show/all-fixtures)
+                   :chance 0.07 :fade-time 500)))))
+
+
+  (ct/set-cue! (:cue-grid *show*) 0 17
+    (cues/cue :color  (fn [_] (afterglow.effects/scene
+      "Blue and red"
+        (show/add-effect! :color-back-odd (afterglow.effects.color/color-effect
+          "Plain red" (create-color "red") (show/fixtures-named "back-odd")))
+        (show/add-effect! :color-back-even (afterglow.effects.color/color-effect
+          "Plain Blue" (create-color "blue") (show/fixtures-named "back-even")))
+    ))))
 )
 
 (defn make-cues
