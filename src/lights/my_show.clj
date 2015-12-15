@@ -129,7 +129,7 @@
   (show/patch-fixture! :head-1 (jb-systems-sirius-8ch :pan-center 86 :pan-half-circle 0
                                                       :tilt-center 35 :tilt-half-circle 224)
                        1 49 :x 3.5  :y 7  :z 2.8)
-  (show/patch-fixture! :head-2 (jb-systems-sirius-8ch:pan-center 86 :pan-half-circle 0
+  (show/patch-fixture! :head-2 (jb-systems-sirius-8ch :pan-center 86 :pan-half-circle 0
                                                                  :tilt-center 35 :tilt-half-circle 224)
                        1 65 :x 3.5  :y 7  :z 2.8) 
   (show/patch-fixture! :head-3 (jb-systems-sirius-8ch :pan-center 86 :pan-half-circle 0
