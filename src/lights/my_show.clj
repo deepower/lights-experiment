@@ -14,6 +14,7 @@
             [afterglow.effects.movement :as move]
             [afterglow.effects.oscillators :as oscillators]
             [afterglow.effects.params :as params]
+            [afterglow.effects.show-variable :as var-fx]
             [afterglow.fixtures.blizzard :as blizzard]
             [afterglow.rhythm :as rhythm]
             [afterglow.show :as show]
@@ -26,6 +27,9 @@
   my-show
   (atom nil))
 
+(defonce ^{:doc "Allows effects to set variables in the running show."}
+  var-binder
+  (atom nil))
 
 ; 2DO: understand how to pack dimmer and strobe into 1 function definition
 (defn simple-rgbd
@@ -433,6 +437,20 @@
         (afterglow.effects.color/color-effect
           "Plain Blue" (create-color "blue") (show/fixtures-named "back-even"))
     ))))
+
+  (ct/set-cue! (:cue-grid *show*) 0 18
+    (cues/cue :color (fn [_](afterglow.effects/scene
+      "Hue 0"
+        (fn [_] (var-fx/variable-effect @var-binder :main-hue 0))
+      )
+    )))
+  (ct/set-cue! (:cue-grid *show*) 1 18
+    (cues/cue :color (fn [_](afterglow.effects/scene
+      "Hue 120"
+        (set-hue 120)
+        (fn [_] (var-fx/variable-effect @var-binder :main-hue 120))
+      )
+    )))
 )
 
 (defn make-cues
