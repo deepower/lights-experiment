@@ -73,14 +73,22 @@
     })
 
 (defn jb-systems-sirius-8ch
-  "JB SYSTEMS - Lyre Sirius 60W"
-  []
+  "JB SYSTEMS - Lyre Sirius 60W.
+
+  The way these fixtures respond to pan and tilt values seems vary. In
+  order to be able to get consistent results with a mixed group of
+  fixtures, you can override the values of `:pan-center`,
+  `:pan-half-circle`, `:tilt-center` and `:tilt-half-circle` which
+  used to work by passing in new values using optional keyword
+  arguments."
+  [& {:keys [pan-center pan-half-circle tilt-center tilt-half-circle]
+      :or {:pan-center 86 :pan-half-circle 0 :tilt-center 35 :tilt-half-circle 224}}]
   {:channels [(chan/pan 1)
               (chan/tilt 2)
               (chan/functions :shutter 3 0 "Shutter Closed" 255 "Shutter Open")
-              (chan/dimmer 7)
-              ]
-    })
+              (chan/dimmer 7)]
+   :pan-center pan-center :pan-half-circle pan-half-circle
+   :tilt-center tilt-center :tilt-half-circle tilt-half-circle})
 
 
 (defn use-my-show
@@ -118,14 +126,18 @@
 
   (show/patch-fixture! :scene-side-1 (rgbw-simple) 1 33  :x 0 :y 1.7 :z 1.5)
 
-  (show/patch-fixture! :head-1 (jb-systems-sirius-8ch) 1 49 :x 3.5  :y 7  :z 2.8
-    :pan-center 86 :pan-half-circle 0 :tilt-center 35 :tilt-half-circle 224)
-  (show/patch-fixture! :head-2 (jb-systems-sirius-8ch) 1 65 :x 3.5  :y 7  :z 2.8
-    :pan-center 86 :pan-half-circle 0 :tilt-center 35 :tilt-half-circle 224) 
-  (show/patch-fixture! :head-3 (jb-systems-sirius-8ch) 1 81 :x 3.5  :y 7  :z 2.8
-    :pan-center 86 :pan-half-circle 0 :tilt-center 35 :tilt-half-circle 224)
-  (show/patch-fixture! :head-4 (jb-systems-sirius-8ch) 1 97 :x 3.5  :y 7  :z 2.8
-    :pan-center 86 :pan-half-circle 0 :tilt-center 35 :tilt-half-circle 224)
+  (show/patch-fixture! :head-1 (jb-systems-sirius-8ch :pan-center 86 :pan-half-circle 0
+                                                      :tilt-center 35 :tilt-half-circle 224)
+                       1 49 :x 3.5  :y 7  :z 2.8)
+  (show/patch-fixture! :head-2 (jb-systems-sirius-8ch:pan-center 86 :pan-half-circle 0
+                                                                 :tilt-center 35 :tilt-half-circle 224)
+                       1 65 :x 3.5  :y 7  :z 2.8) 
+  (show/patch-fixture! :head-3 (jb-systems-sirius-8ch :pan-center 86 :pan-half-circle 0
+                                                      :tilt-center 35 :tilt-half-circle 224)
+                       1 81 :x 3.5  :y 7  :z 2.8)
+  (show/patch-fixture! :head-4 (jb-systems-sirius-8ch :pan-center 86 :pan-half-circle 0
+                                                      :tilt-center 35 :tilt-half-circle 224)
+                       1 97 :x 3.5  :y 7  :z 2.8)
 
   (show/patch-fixture! :back-1 (simple-rgbd) 1 113 :x -1.757 :y 0.325 :z 0.3)
   (show/patch-fixture! :back-2 (simple-rgbd) 1 117 :x -1.057 :y 0.325 :z 0.3)
