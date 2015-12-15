@@ -72,21 +72,11 @@
               (chan/color 4 :white)]
     })
 
-(defn jb-systems-sirius
-  "JB SYSTEMS - Lyre Sirius 60W"
-  []
-  {:channels [(chan/pan 1)
-              (chan/tilt 3)
-              (chan/dimmer 6)
-              (chan/functions :shutter 7 0 "Shutter Closed" 255 "Shutter Open")
-              ]
-    })
-
 (defn jb-systems-sirius-8ch
   "JB SYSTEMS - Lyre Sirius 60W"
   []
   {:channels [(chan/pan 1)
-              (chan/tilt 3)
+              (chan/tilt 2)
               (chan/functions :shutter 3 0 "Shutter Closed" 255 "Shutter Open")
               (chan/dimmer 7)
               ]
@@ -128,10 +118,14 @@
 
   (show/patch-fixture! :scene-side-1 (rgbw-simple) 1 33  :x 0 :y 1.7 :z 1.5)
 
-  (show/patch-fixture! :head-1 (jb-systems-sirius-8ch) 1 49 :x 3.5  :y 7  :z 2.8)
-  (show/patch-fixture! :head-2 (jb-systems-sirius-8ch) 1 65 :x 3.5  :y 7  :z 2.8)
-  (show/patch-fixture! :head-3 (jb-systems-sirius-8ch) 1 81 :x 3.5  :y 7  :z 2.8)
-  (show/patch-fixture! :head-4 (jb-systems-sirius-8ch) 1 97 :x 3.5  :y 7  :z 2.8)
+  (show/patch-fixture! :head-1 (jb-systems-sirius-8ch) 1 49 :x 3.5  :y 7  :z 2.8
+    :pan-center 86 :pan-half-circle 0 :tilt-center 35 :tilt-half-circle 224)
+  (show/patch-fixture! :head-2 (jb-systems-sirius-8ch) 1 65 :x 3.5  :y 7  :z 2.8
+    :pan-center 86 :pan-half-circle 0 :tilt-center 35 :tilt-half-circle 224) 
+  (show/patch-fixture! :head-3 (jb-systems-sirius-8ch) 1 81 :x 3.5  :y 7  :z 2.8
+    :pan-center 86 :pan-half-circle 0 :tilt-center 35 :tilt-half-circle 224)
+  (show/patch-fixture! :head-4 (jb-systems-sirius-8ch) 1 97 :x 3.5  :y 7  :z 2.8
+    :pan-center 86 :pan-half-circle 0 :tilt-center 35 :tilt-half-circle 224)
 
   (show/patch-fixture! :back-1 (simple-rgbd) 1 113 :x -1.757 :y 0.325 :z 0.3)
   (show/patch-fixture! :back-2 (simple-rgbd) 1 117 :x -1.057 :y 0.325 :z 0.3)
@@ -144,9 +138,9 @@
   ;; all the expanded, patched fixtures in it.
   '*show*)
 
-(use-my-show)
+;(use-my-show)
 
-;(use-london-show)
+(use-london-show)
 
 (defn global-color-effect
   "Make a color effect which affects all lights in the sample show.
@@ -320,6 +314,14 @@
 
 (fiat-lux)
 
+(defn london-temp
+  "Temporary function for testing"
+  []
+  (show/add-effect! :color (global-color-effect
+    (params/build-color-param :h :main-hue :s 100 :l 20)))
+  (show/add-effect! :dimmers (global-dimmer-effect 255))
+  )
+
 (defn shutter-open
   "Open shutters"
   []
@@ -330,6 +332,34 @@
 )
 
 (shutter-open)
+
+(defn calibrate-heads
+  "Helper functions to calibrate heads"
+  []
+  (show/add-effect! :pan-head
+    (afterglow.effects.channel/channel-effect
+      "Pan" (params/build-variable-param :pan)
+      (afterglow.channels/extract-channels
+        (show/fixtures-named "head") #(= (:type %) :pan))))
+  (show/add-effect! :tilt-head
+    (afterglow.effects.channel/channel-effect
+      "Tilt" (params/build-variable-param :tilt)
+      (afterglow.channels/extract-channels
+        (show/fixtures-named "head") #(= (:type %) :tilt))))
+  (afterglow.show/set-variable! :pan 0)
+  (afterglow.show/set-variable! :tilt 0)
+  )
+
+(defn head-direction-z
+  "Direct all heads to Z = 1"
+  []
+  ; (afterglow.effects.movement/direction-effect "Towards z" (params/build-direction-param :x 0 :y 0 :z 1) (show/fixtures-named "head"))
+
+  (show/add-effect! :position
+    (move/direction-effect
+     "Towards z" (params/build-direction-param :x 0 :y 0 :z 1) (show/fixtures-named "head")))
+  )
+
 
 ; Big list of cues from examples
 ; 2DO: learn and delete
