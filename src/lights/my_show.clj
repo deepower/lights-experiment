@@ -80,7 +80,7 @@
               (chan/functions :shutter 3 0 "Shutter Closed" 255 "Shutter Open")
               (chan/dimmer 7)
               ]
-    :pan-center 86 :pan-half-circle 0 :tilt-center 35 :tilt-half-circle 224
+    :pan-center 86 :pan-half-circle 170 :tilt-center 35 :tilt-half-circle 224
     })
 
 
@@ -140,7 +140,7 @@
 (use-london-show)
 
 ; Debug level
-(:timbre/with-level :WARN)
+(timbre/set-config! {:level :warn})
 
 (defn global-color-effect
   "Make a color effect which affects all lights in the sample show.
@@ -246,7 +246,7 @@
 
 (defn light-sine
   "Change light according to sine osc"
-  [beat-ratio]
+  []
   (let [light-param (params/build-oscillated-param
     (oscillators/sine-beat :beat-ratio :osc-beat-ratio :down? true :phase 0.5) :max :max-lightness)]
     (show/add-effect! :color (global-color-effect
