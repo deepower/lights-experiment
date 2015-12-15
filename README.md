@@ -15,6 +15,10 @@
 
 CHO: All is black, strobe with random light
 
+## 2DO London
+
+1. Strobe from left and right fixtures on key
+
 ## Someday
 
 1. Try Strobe with Quneo https://github.com/brunchboy/afterglow/blob/master/doc/effects.adoc#strobe

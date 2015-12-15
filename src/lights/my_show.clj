@@ -80,6 +80,7 @@
               (chan/functions :shutter 3 0 "Shutter Closed" 255 "Shutter Open")
               (chan/dimmer 7)
               ]
+    :pan-center 86 :pan-half-circle 0 :tilt-center 35 :tilt-half-circle 224
     })
 
 
@@ -118,14 +119,10 @@
 
   (show/patch-fixture! :scene-side-1 (rgbw-simple) 1 33  :x 0 :y 1.7 :z 1.5)
 
-  (show/patch-fixture! :head-1 (jb-systems-sirius-8ch) 1 49 :x 3.5  :y 7  :z 2.8
-    :pan-center 86 :pan-half-circle 0 :tilt-center 35 :tilt-half-circle 224)
-  (show/patch-fixture! :head-2 (jb-systems-sirius-8ch) 1 65 :x 3.5  :y 7  :z 2.8
-    :pan-center 86 :pan-half-circle 0 :tilt-center 35 :tilt-half-circle 224) 
-  (show/patch-fixture! :head-3 (jb-systems-sirius-8ch) 1 81 :x 3.5  :y 7  :z 2.8
-    :pan-center 86 :pan-half-circle 0 :tilt-center 35 :tilt-half-circle 224)
-  (show/patch-fixture! :head-4 (jb-systems-sirius-8ch) 1 97 :x 3.5  :y 7  :z 2.8
-    :pan-center 86 :pan-half-circle 0 :tilt-center 35 :tilt-half-circle 224)
+  (show/patch-fixture! :head-1 (jb-systems-sirius-8ch) 1 49 :x 3.5  :y 7  :z 2.8)
+  (show/patch-fixture! :head-2 (jb-systems-sirius-8ch) 1 65 :x 3.5  :y 7  :z 2.8) 
+  (show/patch-fixture! :head-3 (jb-systems-sirius-8ch) 1 81 :x 3.5  :y 7  :z 2.8)
+  (show/patch-fixture! :head-4 (jb-systems-sirius-8ch) 1 97 :x 3.5  :y 7  :z 2.8)
 
   (show/patch-fixture! :back-1 (simple-rgbd) 1 113 :x -1.757 :y 0.325 :z 0.3)
   (show/patch-fixture! :back-2 (simple-rgbd) 1 117 :x -1.057 :y 0.325 :z 0.3)
@@ -141,6 +138,9 @@
 ;(use-my-show)
 
 (use-london-show)
+
+; Debug level
+(:timbre/with-level :WARN)
 
 (defn global-color-effect
   "Make a color effect which affects all lights in the sample show.
@@ -359,6 +359,13 @@
     (move/direction-effect
      "Towards z" (params/build-direction-param :x 0 :y 0 :z 1) (show/fixtures-named "head")))
   )
+
+(defn head-aim-center
+  "Direct head to the center of dancefloor"
+  []
+  (show/add-effect! :position
+    (move/aim-effect "Center" (params/build-aim-param :x 0 :y 0 :z 5) (show/fixtures-named "head")))
+)
 
 
 ; Big list of cues from examples
