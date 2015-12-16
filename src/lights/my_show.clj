@@ -31,9 +31,8 @@
   var-binder
   (atom nil))
 
-; 2DO: understand how to pack dimmer and strobe into 1 function definition
-(defn simple-rgbd
-  "A simple RGB with dimmer"
+(defn rgbd-cheap
+  "A simple RGB with dimmer and strobe on 1 channel"
   []
   {:channels [(chan/color 1 :red)
               (chan/color 2 :green)
@@ -94,9 +93,9 @@
         (with-show s (show/stop!)))
       (show/show :universes [1] :description "Accuraten"))))
 
-  (show/patch-fixture! :back-odd-1 (simple-rgbd) 1 1 :x 1)
-  (show/patch-fixture! :back-even-2 (simple-rgbd) 1 5 :x 2)
-  (show/patch-fixture! :back-odd-3 (simple-rgbd) 1 9 :x 3)
+  (show/patch-fixture! :back-odd-1 (rgbd-cheap) 1 1 :x 1)
+  (show/patch-fixture! :back-even-2 (rgbd-cheap) 1 5 :x 2)
+  (show/patch-fixture! :back-odd-3 (rgbd-cheap) 1 9 :x 3)
   (show/patch-fixture! :front-1 (rgb-arch) 1 13  :x 3.5)
 
   ;; Return the show's symbol, rather than the actual map, which gets huge with
@@ -124,12 +123,12 @@
   (show/patch-fixture! :head-3 (jb-systems-sirius-8ch) 1 81 :x 3.5  :y 7  :z 2.8)
   (show/patch-fixture! :head-4 (jb-systems-sirius-8ch) 1 97 :x 3.5  :y 7  :z 2.8)
 
-  (show/patch-fixture! :back-1 (simple-rgbd) 1 113 :x -1.757 :y 0.325 :z 0.3)
-  (show/patch-fixture! :back-2 (simple-rgbd) 1 117 :x -1.057 :y 0.325 :z 0.3)
-  (show/patch-fixture! :back-3 (simple-rgbd) 1 121 :x -0.39  :y 0.325 :z 0.3)
-  (show/patch-fixture! :back-4 (simple-rgbd) 1 125 :x 0.39   :y 0.325 :z 0.3)
-  (show/patch-fixture! :back-5 (simple-rgbd) 1 129 :x 1.057  :y 0.325 :z 0.3)
-  (show/patch-fixture! :back-6 (simple-rgbd) 1 133 :x 1.757  :y 0.325 :z 0.3)
+  (show/patch-fixture! :back-1 (rgbd-cheap) 1 113 :x -1.757 :y 0.325 :z 0.3)
+  (show/patch-fixture! :back-2 (rgbd-cheap) 1 117 :x -1.057 :y 0.325 :z 0.3)
+  (show/patch-fixture! :back-3 (rgbd-cheap) 1 121 :x -0.39  :y 0.325 :z 0.3)
+  (show/patch-fixture! :back-4 (rgbd-cheap) 1 125 :x 0.39   :y 0.325 :z 0.3)
+  (show/patch-fixture! :back-5 (rgbd-cheap) 1 129 :x 1.057  :y 0.325 :z 0.3)
+  (show/patch-fixture! :back-6 (rgbd-cheap) 1 133 :x 1.757  :y 0.325 :z 0.3)
 
   ;; Return the show's symbol, rather than the actual map, which gets huge with
   ;; all the expanded, patched fixtures in it.
