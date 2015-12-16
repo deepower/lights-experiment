@@ -222,6 +222,8 @@
     )
 )
 
+(bind-midi "automap")
+
 (defn set-hue
   "Set main hue"
   [hue]
@@ -383,13 +385,11 @@
   []
 
   (ct/set-cue! (:cue-grid *show*) 0 7
-      (cues/cue :sparkle (fn [var-map] (fun/sparkle (show/all-fixtures)
-        :chance (:chance var-map 0.05)
-        :fade-time (:fade-time var-map 50)))
+      (cues/cue :sparkle (fn [_] (fun/sparkle (show/all-fixtures)
+        :chance :sparkle-chance
+        :fade-time :sparkle-fade))
           :held true
-          :priority 100
-          :variables [{:key "chance" :min 0.0 :max 0.4 :start 0.05 :velocity true}
-            {:key "fade-time" :name "Fade" :min 1 :max 2000 :start 50 :type :integer}]))
+          :priority 100))
 
   (ct/set-cue! (:cue-grid *show*) 0 1
     (cues/cue :color  (fn [_] (afterglow.effects/scene
