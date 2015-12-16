@@ -27,10 +27,6 @@
   my-show
   (atom nil))
 
-(defonce ^{:doc "Allows effects to set variables in the running show."}
-  var-binder
-  (atom nil))
-
 (defn rgbd-cheap
   "A simple RGB with dimmer and strobe on 1 channel"
   []
@@ -323,7 +319,7 @@
   )
 
 (defn shutter-open
-  "Open shutters"
+  "Open shutters on heads in London show"
   []
   (show/add-effect! :shutter
     (afterglow.effects.channel/channel-effect "Shutter" 255
@@ -367,38 +363,70 @@
     (move/aim-effect "Center" (params/build-aim-param :x 0 :y 0 :z 5) (show/fixtures-named "head")))
 )
 
+; Magic from Afterglow examples
+(defonce ^{:doc "Allows effects to set variables in the running show."}
+  var-binder
+  (atom nil))
+(reset! var-binder (var-fx/create-for-show *show*))
+
 (defn new-cues
   "Create cues."
   []
 
-  (ct/set-cue! (:cue-grid *show*) 0 16
-    (cues/cue :color  (fn [_] (afterglow.effects/scene
-      "Blue Sparks"
-      (global-color-effect :blue)
-      (fun/sparkle (show/all-fixtures)
-                   :chance 0.07 :fade-time 500)))))
+  (ct/set-cue! (:cue-grid *show*) 0 7
+      (cues/cue :sparkle (fn [var-map] (fun/sparkle (show/all-fixtures)
+        :chance (:chance var-map 0.05)
+        :fade-time (:fade-time var-map 50)))
+          :held true
+          :priority 100
+          :variables [{:key "chance" :min 0.0 :max 0.4 :start 0.05 :velocity true}
+            {:key "fade-time" :name "Fade" :min 1 :max 2000 :start 50 :type :integer}]))
 
-
-  (ct/set-cue! (:cue-grid *show*) 0 17
+  (ct/set-cue! (:cue-grid *show*) 0 1
     (cues/cue :color  (fn [_] (afterglow.effects/scene
-      "Blue and red 2"
+      "Blue and red"
         (afterglow.effects.color/color-effect
           "Plain red" (create-color "red") (show/fixtures-named "back-odd"))
         (afterglow.effects.color/color-effect
           "Plain Blue" (create-color "blue") (show/fixtures-named "back-even"))
     ))))
 
-  (ct/set-cue! (:cue-grid *show*) 0 18
+  (ct/set-cue! (:cue-grid *show*) 0 0
     (cues/cue :color (fn [_](afterglow.effects/scene
-      "Hue 0"
+      "Hue Red"
         (fn [_] (var-fx/variable-effect @var-binder :main-hue 0))
       )
     )))
-  (ct/set-cue! (:cue-grid *show*) 1 18
+  (ct/set-cue! (:cue-grid *show*) 1 0
     (cues/cue :color (fn [_](afterglow.effects/scene
-      "Hue 120"
-        (set-hue 120)
+      "Hue Yellow"
+        (fn [_] (var-fx/variable-effect @var-binder :main-hue 60))
+      )
+    )))
+  (ct/set-cue! (:cue-grid *show*) 2 0
+    (cues/cue :color (fn [_](afterglow.effects/scene
+      "Hue Green"
         (fn [_] (var-fx/variable-effect @var-binder :main-hue 120))
       )
     )))
+  (ct/set-cue! (:cue-grid *show*) 3 0
+    (cues/cue :color (fn [_](afterglow.effects/scene
+      "Hue Blue"
+        (fn [_] (var-fx/variable-effect @var-binder :main-hue 180))
+      )
+    )))
+  (ct/set-cue! (:cue-grid *show*) 4 0
+    (cues/cue :color (fn [_](afterglow.effects/scene
+      "Hue Violet"
+        (fn [_] (var-fx/variable-effect @var-binder :main-hue 240))
+      )
+    )))
+  (ct/set-cue! (:cue-grid *show*) 5 0
+    (cues/cue :color (fn [_](afterglow.effects/scene
+      "Hue Purple"
+        (fn [_] (var-fx/variable-effect @var-binder :main-hue 300))
+      )
+    )))
 )
+
+(new-cues)
