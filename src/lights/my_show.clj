@@ -386,13 +386,21 @@
   []
 
   (ct/set-cue! (:cue-grid *show*) 0 7
-      (cues/cue :sparkle (fn [_] (afterglow.effects/scene
-        "Sparkle all"
-        (fun/sparkle (show/all-fixtures)
-        :chance :sparkle-chance
-        :fade-time :sparkle-fade))
-          :held true
-          :priority 100)))
+    (cues/cue :sparkle (fn [_] (fun/sparkle (show/all-fixtures)
+      :chance :sparkle-chance
+      :fade-time :sparkle-fade))
+        :held true
+        :priority 100
+        ))
+
+  (ct/set-cue! (:cue-grid *show*) 1 7
+    (cues/cue :sparkle (fn [_] (fun/sparkle (show/fixtures-named "scene")
+      ;2DO find good values here
+      :chance 0.3
+      :fade-time 400))
+        :held true
+        :priority 100
+        ))
 
   (ct/set-cue! (:cue-grid *show*) 0 2
     (cues/cue :color  (fn [_] (afterglow.effects/scene
