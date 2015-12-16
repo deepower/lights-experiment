@@ -303,7 +303,8 @@
 )
 
 (defn separate-colors
-  "Asign different colors to different fixtures. Experiment."
+  "Asign different colors to different fixtures. Experiment.
+  Take care of this https://github.com/brunchboy/afterglow/issues/30#issuecomment-165255504"
   []
   (afterglow.effects/scene "Different colors"
     (show/add-effect! :color (afterglow.effects.color/color-effect
@@ -385,11 +386,13 @@
   []
 
   (ct/set-cue! (:cue-grid *show*) 0 7
-      (cues/cue :sparkle (fn [_] (fun/sparkle (show/all-fixtures)
+      (cues/cue :sparkle (fn [_] (afterglow.effects/scene
+        "Sparkle all"
+        (fun/sparkle (show/all-fixtures)
         :chance :sparkle-chance
         :fade-time :sparkle-fade))
           :held true
-          :priority 100))
+          :priority 100)))
 
   (ct/set-cue! (:cue-grid *show*) 0 2
     (cues/cue :color  (fn [_] (afterglow.effects/scene
@@ -410,41 +413,29 @@
     ))))
 
   (ct/set-cue! (:cue-grid *show*) 0 0
-    (cues/cue :color-var (fn [_](afterglow.effects/scene
-      "Hue Red"
-        (fn [_] (var-fx/variable-effect @var-binder :main-hue 0))
+    (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :main-hue 0))
       )
-    )))
+    )
   (ct/set-cue! (:cue-grid *show*) 1 0
-    (cues/cue :color-var (fn [_](afterglow.effects/scene
-      "Hue Yellow"
-        (fn [_] (var-fx/variable-effect @var-binder :main-hue 60))
+    (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :main-hue 60))
       )
-    )))
+    )
   (ct/set-cue! (:cue-grid *show*) 2 0
-    (cues/cue :color-var (fn [_](afterglow.effects/scene
-      "Hue Green"
-        (fn [_] (var-fx/variable-effect @var-binder :main-hue 120))
+    (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :main-hue 120))
       )
-    )))
+    )
   (ct/set-cue! (:cue-grid *show*) 3 0
-    (cues/cue :color-var (fn [_](afterglow.effects/scene
-      "Hue Blue"
-        (fn [_] (var-fx/variable-effect @var-binder :main-hue 180))
+    (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :main-hue 180))
       )
-    )))
+    )
   (ct/set-cue! (:cue-grid *show*) 4 0
-    (cues/cue :color-var (fn [_](afterglow.effects/scene
-      "Hue Violet"
-        (fn [_] (var-fx/variable-effect @var-binder :main-hue 240))
+    (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :main-hue 240))
       )
-    )))
+    )
   (ct/set-cue! (:cue-grid *show*) 5 0
-    (cues/cue :color-var (fn [_](afterglow.effects/scene
-      "Hue Purple"
-        (fn [_] (var-fx/variable-effect @var-binder :main-hue 300))
+    (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :main-hue 300))
       )
-    )))
+    )
 )
 
 (new-cues)

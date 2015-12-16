@@ -1,9 +1,7 @@
 ## 2DO
 
 1. bind-midi variables, that have :maximum linked to :max-lightness
-1. Refactor functions to change arbitrary lights (all by default)
-1. Find a way to select odd/even lights
-1. Find a way to use Dynamic parameters with other Dynamic parameters in math
+1. [waiting] Find a way to use Dynamic parameters with other Dynamic parameters in math
 1. Change intensity of pulse (width of the pulse) with MIDI
 1. Find way to control variable with many sources. Override with last setting came.
 — from console
