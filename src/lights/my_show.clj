@@ -391,13 +391,22 @@
           :held true
           :priority 100))
 
-  (ct/set-cue! (:cue-grid *show*) 0 1
+  (ct/set-cue! (:cue-grid *show*) 0 2
     (cues/cue :color  (fn [_] (afterglow.effects/scene
       "Blue and red"
         (afterglow.effects.color/color-effect
           "Plain red" (create-color "red") (show/fixtures-named "back-odd"))
         (afterglow.effects.color/color-effect
           "Plain Blue" (create-color "blue") (show/fixtures-named "back-even"))
+    ))))
+
+  (ct/set-cue! (:cue-grid *show*) 0 1
+    (cues/cue :color  (fn [_] (afterglow.effects/scene
+      "Sawtooth All"
+      (let [light-param (params/build-oscillated-param
+        (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :max :max-lightness)]
+        (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
+      )
     ))))
 
   (ct/set-cue! (:cue-grid *show*) 0 0
