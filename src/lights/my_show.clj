@@ -213,6 +213,8 @@
         "Automap MIDI" 10 21 :sparkle-chance :min 0 :max 0.5)
       (show/add-midi-control-to-var-mapping
         "Automap MIDI" 10 22 :sparkle-fade :min 1 :max 2000)
+      (show/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 51 0 7)
+      (show/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 52 1 7)
     )
   )
 
@@ -391,6 +393,7 @@
       :fade-time :sparkle-fade))
         :held true
         :priority 100
+        :short-name "Sparkle all"
         ))
 
   (ct/set-cue! (:cue-grid *show*) 1 7
@@ -400,6 +403,7 @@
       :fade-time 400))
         :held true
         :priority 100
+        :short-name "Sparkle scene"
         ))
 
   (ct/set-cue! (:cue-grid *show*) 0 2
@@ -421,27 +425,33 @@
     ))))
 
   (ct/set-cue! (:cue-grid *show*) 0 0
-    (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :main-hue 0))
+    (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :main-hue 0)) 
+      :short-name "Red"
       )
     )
   (ct/set-cue! (:cue-grid *show*) 1 0
-    (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :main-hue 60))
+    (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :main-hue 60)) 
+      :short-name "Yellow"
       )
     )
   (ct/set-cue! (:cue-grid *show*) 2 0
-    (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :main-hue 120))
+    (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :main-hue 120)) 
+      :short-name "Green"
       )
     )
   (ct/set-cue! (:cue-grid *show*) 3 0
     (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :main-hue 180))
+      :short-name "Blue"
       )
     )
   (ct/set-cue! (:cue-grid *show*) 4 0
     (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :main-hue 240))
+      :short-name "Dark blue"
       )
     )
   (ct/set-cue! (:cue-grid *show*) 5 0
     (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :main-hue 300))
+      :short-name "Purple"
       )
     )
 )
