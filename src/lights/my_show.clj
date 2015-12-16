@@ -139,8 +139,8 @@
 
 (use-london-show)
 
-; Debug level
-(timbre/set-config! {:level :warn})
+; Logging level set to :info
+(core/init-logging)
 
 (defn global-color-effect
   "Make a color effect which affects all lights in the sample show.
