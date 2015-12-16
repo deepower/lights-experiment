@@ -174,9 +174,7 @@
   []
   (show/add-effect! :color (global-color-effect "slateblue" :include-color-wheels? true))
   (show/add-effect! :dimmers (global-dimmer-effect 255))
-  (show/add-effect! :torrent-shutter
-                    (afterglow.effects.channel/function-effect
-                     "Torrents Open" :shutter-open 50 (show/fixtures-named "torrent"))))
+)
 
 (core/start-web-server 16000 false)
 (show/start!)     ; Start sending its DMX frames.
