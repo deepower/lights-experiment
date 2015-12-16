@@ -207,6 +207,15 @@
     )
   )
 
+  (if (= interface "automap")
+    (do
+      (show/add-midi-control-to-var-mapping
+        "Automap MIDI" 10 21 :sparkle-chance :min 0 :max 0.5)
+      (show/add-midi-control-to-var-mapping
+        "Automap MIDI" 10 22 :sparkle-fade :min 1 :max 2000)
+    )
+  )
+
   (if (= interface "uno-clock")
     (show/sync-to-external-clock
       (afterglow.midi/sync-to-midi-clock "USB Uno MIDI Interface"))
@@ -392,37 +401,37 @@
     ))))
 
   (ct/set-cue! (:cue-grid *show*) 0 0
-    (cues/cue :color (fn [_](afterglow.effects/scene
+    (cues/cue :color-var (fn [_](afterglow.effects/scene
       "Hue Red"
         (fn [_] (var-fx/variable-effect @var-binder :main-hue 0))
       )
     )))
   (ct/set-cue! (:cue-grid *show*) 1 0
-    (cues/cue :color (fn [_](afterglow.effects/scene
+    (cues/cue :color-var (fn [_](afterglow.effects/scene
       "Hue Yellow"
         (fn [_] (var-fx/variable-effect @var-binder :main-hue 60))
       )
     )))
   (ct/set-cue! (:cue-grid *show*) 2 0
-    (cues/cue :color (fn [_](afterglow.effects/scene
+    (cues/cue :color-var (fn [_](afterglow.effects/scene
       "Hue Green"
         (fn [_] (var-fx/variable-effect @var-binder :main-hue 120))
       )
     )))
   (ct/set-cue! (:cue-grid *show*) 3 0
-    (cues/cue :color (fn [_](afterglow.effects/scene
+    (cues/cue :color-var (fn [_](afterglow.effects/scene
       "Hue Blue"
         (fn [_] (var-fx/variable-effect @var-binder :main-hue 180))
       )
     )))
   (ct/set-cue! (:cue-grid *show*) 4 0
-    (cues/cue :color (fn [_](afterglow.effects/scene
+    (cues/cue :color-var (fn [_](afterglow.effects/scene
       "Hue Violet"
         (fn [_] (var-fx/variable-effect @var-binder :main-hue 240))
       )
     )))
   (ct/set-cue! (:cue-grid *show*) 5 0
-    (cues/cue :color (fn [_](afterglow.effects/scene
+    (cues/cue :color-var (fn [_](afterglow.effects/scene
       "Hue Purple"
         (fn [_] (var-fx/variable-effect @var-binder :main-hue 300))
       )
