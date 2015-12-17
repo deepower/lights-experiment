@@ -215,7 +215,7 @@
         "Automap MIDI" 10 22 :sparkle-fade :min 1 :max 2000)
       (show/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 51 0 7)
       (show/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 52 1 7)
-      (show/add-midi-control-to-var-mapping "Automap MIDI" 10 66 :osc-beat-ratio :max 3 :transform-fn (fn [v] (Math/pow 2 (Math/round v))))
+      (show/add-midi-control-to-var-mapping "Automap MIDI" 10 66 :osc-beat-ratio :max 3 :transform-fn (fn [v] (Math/pow 2 (Math/round (- 3 v)))))
     )
   )
 
@@ -422,6 +422,14 @@
       "Sawtooth All"
       (let [light-param (params/build-oscillated-param
         (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :max :max-lightness)]
+        (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
+      )
+    ))))
+  (ct/set-cue! (:cue-grid *show*) 1 1
+    (cues/cue :color  (fn [_] (afterglow.effects/scene
+      "Sine All"
+      (let [light-param (params/build-oscillated-param
+        (oscillators/sine-beat :beat-ratio :osc-beat-ratio :down? true) :max :max-lightness)]
         (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
       )
     ))))
