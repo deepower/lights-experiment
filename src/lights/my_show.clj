@@ -515,7 +515,7 @@
     ))))
 
   (let [light-param (params/build-oscillated-param
-        (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
+        (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-back)]
     (ct/set-cue! (:cue-grid *show*) 0 2
       (cues/cue :color  (fn [_] (afterglow.effects/scene
         "Sawtooth Back"
@@ -525,18 +525,29 @@
   ))
 
 
+  (let [light-param (params/build-oscillated-param
+        (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-front)]
+    (ct/set-cue! (:cue-grid *show*) 1 2
+      (cues/cue :color  (fn [_] (afterglow.effects/scene
+        "Sawtooth Front"
+          (afterglow.effects.color/color-effect
+            "Bass" (params/build-color-param :h :main-hue :s 100 :l light-param) (show/fixtures-named "front"))
+      )))
+  ))
+
+
 
   (let [light-param-back (params/build-oscillated-param
         (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)
         light-param-front (params/build-oscillated-param
         (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-front)]
-    (ct/set-cue! (:cue-grid *show*) 1 2
+    (ct/set-cue! (:cue-grid *show*) 2 2
       (cues/cue :color  (fn [_] (afterglow.effects/scene
         "Sawtooth Back & Front"
           (afterglow.effects.color/color-effect
-            "Bass" (params/build-color-param :h :main-hue :s 100 :l light-param-back) (show/fixtures-named "back"))
+            "Back" (params/build-color-param :h :main-hue :s 100 :l light-param-back) (show/fixtures-named "back"))
           (afterglow.effects.color/color-effect
-            "Bass" (params/build-color-param :h :main-hue :s 100 :l light-param-front (show/fixtures-named "front"))
+            "Front" (params/build-color-param :h :main-hue :s 100 :l light-param-front (show/fixtures-named "front"))
       )))
   )))
 
