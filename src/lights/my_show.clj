@@ -210,12 +210,28 @@
   (if (= interface "automap")
     (do
       (show/add-midi-control-to-var-mapping
-        "Automap MIDI" 10 21 :sparkle-chance :min 0 :max 0.5)
+        "Automap MIDI" 10 21 :sparkle-chance :min 0.01 :max 0.2)
       (show/add-midi-control-to-var-mapping
-        "Automap MIDI" 10 22 :sparkle-fade :min 1 :max 2000)
+        "Automap MIDI" 10 22 :sparkle-fade :min 1 :max 500)
       (show/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 51 0 7)
       (show/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 52 1 7)
       (show/add-midi-control-to-var-mapping "Automap MIDI" 10 66 :osc-beat-ratio :max 3 :transform-fn (fn [v] (Math/pow 2 (Math/round (- 3 v)))))
+      (show/add-midi-control-to-var-mapping
+        "Automap MIDI" 10 25 :lightness-max-general :min 0 :max 100)
+      (show/add-midi-control-to-var-mapping
+        "Automap MIDI" 10 26 :lightness-max-back :min 0 :max 100)
+      (show/add-midi-control-to-var-mapping
+        "Automap MIDI" 10 27 :lightness-max-front :min 0 :max 100)
+      (show/add-midi-control-to-var-mapping
+        "Automap MIDI" 10 24 :lightness-min-general :min -100 :max 0
+          :transform-fn (fn [v] (- 0 v)))
+
+      ; Defaults
+      (afterglow.show/set-variable! :lightness-min-general 0)
+      (afterglow.show/set-variable! :lightness-max-front 50)
+      (afterglow.show/set-variable! :lightness-max-back 50)
+      (afterglow.show/set-variable! :lightness-max-general 50)
+
     )
   )
 
@@ -421,7 +437,7 @@
     (cues/cue :color  (fn [_] (afterglow.effects/scene
       "Sawtooth All"
       (let [light-param (params/build-oscillated-param
-        (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :max :max-lightness)]
+        (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
         (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
       )
     ))))
@@ -429,7 +445,7 @@
     (cues/cue :color  (fn [_] (afterglow.effects/scene
       "Sine All"
       (let [light-param (params/build-oscillated-param
-        (oscillators/sine-beat :beat-ratio :osc-beat-ratio :down? true) :max :max-lightness)]
+        (oscillators/sine-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
         (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
       )
     ))))
