@@ -207,6 +207,25 @@
     )
   )
 
+  (if (= interface "audio6")
+    (do
+      (show/add-midi-control-to-var-mapping
+        "Komplete Audio 6" 9 0 :audio-drums :min -10 :max 50)
+
+      (show/add-midi-control-to-var-mapping
+        "Komplete Audio 6" 9 1 :audio-bass :max 50)
+
+      (show/add-midi-control-to-var-mapping
+        "Komplete Audio 6" 9 2 :audio-solo :max 50)
+
+      (show/add-midi-control-to-var-mapping
+        "Komplete Audio 6" 9 3 :audio-voice :min -120 :max 50)
+
+      (show/add-midi-control-to-var-mapping
+        "Komplete Audio 6" 9 4 :audio-percussion :max 50)
+    )
+  )
+
   (if (= interface "automap")
     (do
       (show/add-midi-control-to-var-mapping
@@ -223,7 +242,7 @@
       (show/add-midi-control-to-var-mapping
         "Automap MIDI" 10 27 :lightness-max-front :min 0 :max 100)
       (show/add-midi-control-to-var-mapping
-        "Automap MIDI" 10 24 :lightness-min-general :min -100 :max 0
+        "Automap MIDI" 10 24 :lightness-min-general :min 0 :max 100
           :transform-fn (fn [v] (- 0 v)))
 
       ; Defaults
@@ -424,7 +443,8 @@
         :short-name "Sparkle scene"
         ))
 
-  (ct/set-cue! (:cue-grid *show*) 0 2
+
+  (ct/set-cue! (:cue-grid *show*) 0 8
     (cues/cue :color  (fn [_] (afterglow.effects/scene
       "Blue and red"
         (afterglow.effects.color/color-effect
@@ -441,6 +461,7 @@
         (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
       )
     ))))
+
   (ct/set-cue! (:cue-grid *show*) 1 1
     (cues/cue :color  (fn [_] (afterglow.effects/scene
       "Sine All"
