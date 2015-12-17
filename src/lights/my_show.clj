@@ -130,9 +130,9 @@
   ;; all the expanded, patched fixtures in it.
   '*show*)
 
-(use-my-show)
+;(use-my-show)
 
-;(use-london-show)
+(use-london-show)
 
 ; Logging level set to :info
 (core/init-logging)
@@ -244,6 +244,9 @@
       (show/add-midi-control-to-var-mapping
         "Automap MIDI" 10 24 :lightness-min-general :min 0 :max 100
           :transform-fn (fn [v] (- 0 v)))
+
+      ; Reset beat
+      (show/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 58 7 7)
 
       ; Defaults
       (afterglow.show/set-variable! :lightness-min-general 0)
@@ -443,14 +446,35 @@
         :short-name "Sparkle scene"
         ))
 
+  (ct/set-cue! (:cue-grid *show*) 7 7
+    (cues/cue :reset-beat
+      (fn [_] (afterglow.rhythm/metro-start (:metronome *show*) 1)
+              (afterglow.effects/blank))
+        :held true))
 
-  (ct/set-cue! (:cue-grid *show*) 0 8
+  (ct/set-cue! (:cue-grid *show*) 0 3
     (cues/cue :color  (fn [_] (afterglow.effects/scene
-      "Blue and red"
+      "All drums"
         (afterglow.effects.color/color-effect
-          "Plain red" (create-color "red") (show/fixtures-named "back-odd"))
+          "Drums" (params/build-color-param :h :main-hue :s 100 :l :audio-drums) (show/fixtures-named "back"))
         (afterglow.effects.color/color-effect
-          "Plain Blue" (create-color "blue") (show/fixtures-named "back-even"))
+          "Bass" (params/build-color-param :h :main-hue :s 100 :l :audio-drums) (show/fixtures-named "front"))
+    ))))
+  (ct/set-cue! (:cue-grid *show*) 1 3
+    (cues/cue :color  (fn [_] (afterglow.effects/scene
+      "All bass"
+        (afterglow.effects.color/color-effect
+          "Bass" (params/build-color-param :h :main-hue :s 100 :l :audio-bass) (show/fixtures-named "back"))
+        (afterglow.effects.color/color-effect
+          "Bass" (params/build-color-param :h :main-hue :s 100 :l :audio-bass) (show/fixtures-named "front"))
+    ))))
+  (ct/set-cue! (:cue-grid *show*) 2 3
+    (cues/cue :color  (fn [_] (afterglow.effects/scene
+      "Drums back, bass front"
+        (afterglow.effects.color/color-effect
+          "Drums" (params/build-color-param :h :main-hue :s 100 :l :audio-drums) (show/fixtures-named "back"))
+        (afterglow.effects.color/color-effect
+          "Bass" (params/build-color-param :h :main-hue :s 100 :l :audio-bass) (show/fixtures-named "front"))
     ))))
 
   (ct/set-cue! (:cue-grid *show*) 0 1
