@@ -249,6 +249,8 @@
       (show/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 58 7 7)
 
       ; Defaults
+      (afterglow.show/set-variable! :sparkle-chance 0.1)
+      (afterglow.show/set-variable! :sparkle-fade 100)
       (afterglow.show/set-variable! :lightness-min-general 0)
       (afterglow.show/set-variable! :lightness-max-front 50)
       (afterglow.show/set-variable! :lightness-max-back 50)
@@ -383,6 +385,9 @@
 
 (shutter-open)
 
+; Shut down heads temporary
+(show/add-effect! :dimmers (afterglow.effects.dimmer/dimmer-effect 0 (show/fixtures-named "head")))
+
 (defn calibrate-heads
   "Helper functions to calibrate heads"
   []
@@ -452,6 +457,22 @@
               (afterglow.effects/blank))
         :held true))
 
+  (ct/set-cue! (:cue-grid *show*) 0 6
+    (cues/cue :dimmers (fn [_] (dimmer-effect 255 (show/all-fixtures)))
+        :short-name "All dimmers up"
+        ))
+
+  (ct/set-cue! (:cue-grid *show*) 1 6
+    (cues/cue :dimmers (fn [_] (dimmer-effect 0 (show/all-fixtures)))
+        :short-name "All dimmers down"
+        ))
+
+  (ct/set-cue! (:cue-grid *show*) 2 6
+    (cues/cue :dimmers (fn [_] (dimmer-effect 0 (show/fixtures-named "head")))
+        :short-name "Heads down"
+        ))
+
+
   (ct/set-cue! (:cue-grid *show*) 0 3
     (cues/cue :color  (fn [_] (afterglow.effects/scene
       "All drums"
@@ -491,6 +512,15 @@
       "Sine All"
       (let [light-param (params/build-oscillated-param
         (oscillators/sine-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
+        (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
+      )
+    ))))
+
+  (ct/set-cue! (:cue-grid *show*) 2 1
+    (cues/cue :color  (fn [_] (afterglow.effects/scene
+      "Sine All"
+      (let [light-param (params/build-oscillated-param
+        (oscillators/sine-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :audio-drums)]
         (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
       )
     ))))
