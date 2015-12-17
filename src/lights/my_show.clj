@@ -468,9 +468,14 @@
         ))
 
   (ct/set-cue! (:cue-grid *show*) 2 6
-    (cues/cue :dimmers (fn [_] (dimmer-effect 0 (show/fixtures-named "head")))
-        :short-name "Heads down"
-        ))
+    (cues/cue :dimmers (fn [_]
+      (afterglow.effects/scene
+        (dimmer-effect 0 (show/fixtures-named "head"))
+        (dimmer-effect 255 (show/fixtures-named "front"))
+        )
+      )
+    :short-name "Heads down"
+    ))
 
 
   (ct/set-cue! (:cue-grid *show*) 0 3
