@@ -215,6 +215,7 @@
         "Automap MIDI" 10 22 :sparkle-fade :min 1 :max 2000)
       (show/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 51 0 7)
       (show/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 52 1 7)
+      (show/add-midi-control-to-var-mapping "Automap MIDI" 10 66 :osc-beat-ratio :max 3 :transform-fn (fn [v] (Math/pow 2 (Math/round v))))
     )
   )
 
@@ -222,6 +223,10 @@
     (show/sync-to-external-clock
       (afterglow.midi/sync-to-midi-clock "USB Uno MIDI Interface"))
     )
+
+  (if (= interface "identify")
+    (afterglow.midi/identify-mapping))
+
 )
 
 (bind-midi "automap")
@@ -236,9 +241,6 @@
 
 ; Max lightness in the show
 (afterglow.show/set-variable! :max-lightness 50)
-
-; Osc beat ratio, isn't working yet with oscillators, but hope isn't lost
-(afterglow.show/set-variable! :osc-beat-ratio 4)
 
 (defn light-sawtooth
   "Change light according to sawtooth osc"
