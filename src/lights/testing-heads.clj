@@ -1,0 +1,7 @@
+(afterglow.show/set-variable! :pan 0)
+(afterglow.show/set-variable! :pan 86)
+(afterglow.show/set-variable! :tilt 35)
+(afterglow.show/set-variable! :pan 120)
+(afterglow.show/set-variable! :pan 0)
+(afterglow.show/set-variable! :pan 30)
+(afterglow.show/set-variable! :pan 86)

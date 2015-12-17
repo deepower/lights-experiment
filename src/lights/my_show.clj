@@ -75,7 +75,7 @@
               (chan/functions :shutter 3 0 "Shutter Closed" 255 "Shutter Open")
               (chan/dimmer 7)
               ]
-    :pan-center 86 :pan-half-circle 170 :tilt-center 35 :tilt-half-circle 224
+    :pan-center 86 :pan-half-circle 0 :tilt-center 35 :tilt-half-circle 224
     })
 
 
@@ -119,12 +119,12 @@
   (show/patch-fixture! :head-3 (jb-systems-sirius-8ch) 1 81 :x 3.5  :y 7  :z 2.8)
   (show/patch-fixture! :head-4 (jb-systems-sirius-8ch) 1 97 :x 3.5  :y 7  :z 2.8)
 
-  (show/patch-fixture! :back-1 (rgbd-cheap) 1 113 :x -1.757 :y 0.325 :z 0.3)
-  (show/patch-fixture! :back-2 (rgbd-cheap) 1 117 :x -1.057 :y 0.325 :z 0.3)
-  (show/patch-fixture! :back-3 (rgbd-cheap) 1 121 :x -0.39  :y 0.325 :z 0.3)
-  (show/patch-fixture! :back-4 (rgbd-cheap) 1 125 :x 0.39   :y 0.325 :z 0.3)
-  (show/patch-fixture! :back-5 (rgbd-cheap) 1 129 :x 1.057  :y 0.325 :z 0.3)
-  (show/patch-fixture! :back-6 (rgbd-cheap) 1 133 :x 1.757  :y 0.325 :z 0.3)
+  (show/patch-fixture! :back-1 (rgbd-cheap) 1 140 :x -1.757 :y 0.325 :z 0.3)
+  (show/patch-fixture! :back-2 (rgbd-cheap) 1 144 :x -1.057 :y 0.325 :z 0.3)
+  (show/patch-fixture! :back-3 (rgbd-cheap) 1 148 :x -0.39  :y 0.325 :z 0.3)
+  (show/patch-fixture! :back-4 (rgbd-cheap) 1 152 :x 0.39   :y 0.325 :z 0.3)
+  (show/patch-fixture! :back-5 (rgbd-cheap) 1 156 :x 1.057  :y 0.325 :z 0.3)
+  (show/patch-fixture! :back-6 (rgbd-cheap) 1 160 :x 1.757  :y 0.325 :z 0.3)
 
   ;; Return the show's symbol, rather than the actual map, which gets huge with
   ;; all the expanded, patched fixtures in it.
@@ -366,13 +366,13 @@
 
 (fiat-lux)
 
-(defn london-temp
-  "Temporary function for testing"
+(defn london-init
+  "Init of London <show></show>"
   []
-  (show/add-effect! :color (global-color-effect
-    (params/build-color-param :h :main-hue :s 100 :l 20)))
-  (show/add-effect! :dimmers (global-dimmer-effect 255))
+  (bind-midi "audio6")
   )
+
+(london-init)
 
 (defn shutter-open
   "Open shutters on heads in London show"
@@ -470,11 +470,22 @@
   (ct/set-cue! (:cue-grid *show*) 2 6
     (cues/cue :dimmers (fn [_]
       (afterglow.effects/scene
-        (dimmer-effect 0 (show/fixtures-named "head"))
         (dimmer-effect 255 (show/fixtures-named "front"))
+        (dimmer-effect 255 (show/fixtures-named "back"))
         )
       )
     :short-name "Heads down"
+    ))
+
+  (ct/set-cue! (:cue-grid *show*) 3 6
+    (cues/cue :dimmers (fn [_]
+      (afterglow.effects/scene
+        (dimmer-effect 0 (show/fixtures-named "head"))
+        (dimmer-effect 0 (show/fixtures-named "front"))
+        (dimmer-effect 255 (show/fixtures-named "back"))
+        )
+      )
+    :short-name "Back only"
     ))
 
 
@@ -503,6 +514,41 @@
           "Bass" (params/build-color-param :h :main-hue :s 100 :l :audio-bass) (show/fixtures-named "front"))
     ))))
 
+  (let [light-param (params/build-oscillated-param
+        (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
+    (ct/set-cue! (:cue-grid *show*) 0 2
+      (cues/cue :color  (fn [_] (afterglow.effects/scene
+        "Sawtooth Back"
+          (afterglow.effects.color/color-effect
+            "Bass" (params/build-color-param :h :main-hue :s 100 :l light-param) (show/fixtures-named "back"))
+      )))
+  ))
+
+
+
+  (let [light-param-back (params/build-oscillated-param
+        (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)
+        light-param-front (params/build-oscillated-param
+        (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-front)]
+    (ct/set-cue! (:cue-grid *show*) 1 2
+      (cues/cue :color  (fn [_] (afterglow.effects/scene
+        "Sawtooth Back & Front"
+          (afterglow.effects.color/color-effect
+            "Bass" (params/build-color-param :h :main-hue :s 100 :l light-param-back) (show/fixtures-named "back"))
+          (afterglow.effects.color/color-effect
+            "Bass" (params/build-color-param :h :main-hue :s 100 :l light-param-front (show/fixtures-named "front"))
+      )))
+  )))
+
+  (ct/set-cue! (:cue-grid *show*) 1 2
+    (cues/cue :color  (fn [_] (afterglow.effects/scene
+      "Sine Back & Front"
+      (let [light-param (params/build-oscillated-param
+        (oscillators/sine-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
+        (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
+      )
+    ))))
+
   (ct/set-cue! (:cue-grid *show*) 0 1
     (cues/cue :color  (fn [_] (afterglow.effects/scene
       "Sawtooth All"
@@ -517,15 +563,6 @@
       "Sine All"
       (let [light-param (params/build-oscillated-param
         (oscillators/sine-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
-        (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
-      )
-    ))))
-
-  (ct/set-cue! (:cue-grid *show*) 2 1
-    (cues/cue :color  (fn [_] (afterglow.effects/scene
-      "Sine All"
-      (let [light-param (params/build-oscillated-param
-        (oscillators/sine-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :audio-drums)]
         (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
       )
     ))))
