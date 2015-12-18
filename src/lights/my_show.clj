@@ -232,7 +232,7 @@
       (show/add-midi-control-to-var-mapping
         "Automap MIDI" 10 26 :lightness-max-back :min 0 :max 100)
       (show/add-midi-control-to-var-mapping
-        "Automap MIDI" 10 27 :lightness-max-front :min 0 :max 100)
+        "Automap MIDI" 10 27 :lightness-max-front :min 0 :max 30)
       (show/add-midi-control-to-var-mapping
         "Automap MIDI" 10 24 :lightness-min-general :min 0 :max 100
           :transform-fn (fn [v] (- 0 v)))
@@ -244,7 +244,7 @@
       (afterglow.show/set-variable! :sparkle-chance 0.1)
       (afterglow.show/set-variable! :sparkle-fade 100)
       (afterglow.show/set-variable! :lightness-min-general 0)
-      (afterglow.show/set-variable! :lightness-max-front 50)
+      (afterglow.show/set-variable! :lightness-max-front 30)
       (afterglow.show/set-variable! :lightness-max-back 50)
       (afterglow.show/set-variable! :lightness-max-general 50)
 
@@ -259,6 +259,9 @@
   (if (or (= interface "identify") (= interface "id"))
     (afterglow.midi/identify-mapping))
 
+  (if (= interface "traktor-local")
+    (afterglow.midi/sync-to-midi-clock "Traktor Virtual Output")
+    )
 )
 
 
