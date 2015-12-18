@@ -192,16 +192,12 @@
     (do
       (show/add-midi-control-to-var-mapping
         "USB Uno MIDI Interface" 9 0 :audio-drums :min -10 :max 50)
-
       (show/add-midi-control-to-var-mapping
         "USB Uno MIDI Interface" 9 1 :audio-bass :max 50)
-
       (show/add-midi-control-to-var-mapping
         "USB Uno MIDI Interface" 9 2 :audio-solo :max 50)
-
       (show/add-midi-control-to-var-mapping
         "USB Uno MIDI Interface" 9 3 :audio-voice :min -120 :max 50)
-
       (show/add-midi-control-to-var-mapping
         "USB Uno MIDI Interface" 9 4 :audio-percussion :max 50)
     )
@@ -211,16 +207,12 @@
     (do
       (show/add-midi-control-to-var-mapping
         "Komplete Audio 6" 9 0 :audio-drums :min -10 :max 50)
-
       (show/add-midi-control-to-var-mapping
         "Komplete Audio 6" 9 1 :audio-bass :max 50)
-
       (show/add-midi-control-to-var-mapping
         "Komplete Audio 6" 9 2 :audio-solo :max 50)
-
       (show/add-midi-control-to-var-mapping
         "Komplete Audio 6" 9 3 :audio-voice :min -120 :max 50)
-
       (show/add-midi-control-to-var-mapping
         "Komplete Audio 6" 9 4 :audio-percussion :max 50)
     )
