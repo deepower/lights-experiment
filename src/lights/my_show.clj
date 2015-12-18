@@ -179,7 +179,7 @@
 (show/add-effect! :dimmers (global-dimmer-effect 255))
 
 ; 2DO rewrite to connect multiple devices
-(defn bind-midi
+(defn midi
   "Bind MIDI devices"
   [interface]
 
@@ -257,11 +257,12 @@
     )
 
   (if (= interface "identify")
-    (afterglow.midi/identify-mapping))
+    (afterglow.midi/midi-mapping))
 
 )
 
-(bind-midi "automap")
+
+;(midi "automap")
 
 (defn set-hue
   "Set main hue"
@@ -358,14 +359,6 @@
 
 (fiat-lux)
 
-(defn london-init
-  "Init of London <show></show>"
-  []
-  (bind-midi "audio6")
-  )
-
-(london-init)
-
 (defn shutter-open
   "Open shutters on heads in London show"
   []
@@ -375,10 +368,15 @@
         (show/fixtures-named "head") #(= (:type %) :shutter))))
 )
 
-(shutter-open)
+(defn london-init
+  "Init of London show"
+  []
+  (midi "automap")
+  (midi "audio6")
+  (shutter-open)
+  )
 
-; Shut down heads temporary
-(show/add-effect! :dimmers (afterglow.effects.dimmer/dimmer-effect 0 (show/fixtures-named "head")))
+;(london-init)
 
 (defn calibrate-heads
   "Helper functions to calibrate heads"
