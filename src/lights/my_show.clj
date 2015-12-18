@@ -266,8 +266,8 @@
     (afterglow.midi/identify-mapping))
 
   (if (= interface "traktor-local")
-    (afterglow.midi/sync-to-midi-clock "Traktor Virtual Output")
-    )
+    (show/sync-to-external-clock (afterglow.midi/sync-to-midi-clock "Traktor Virtual Output"))
+  )
 )
 
 

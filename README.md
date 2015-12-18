@@ -1,6 +1,9 @@
 ## 2DO
 
 1. bind-midi variables, that have :maximum linked to :max-lightness
+1. Chases for color changes. Auto mode for DJs playing.
+1. Heads looking to audience, strobe effect with them
+1. Heads chasing different pan/tilt points
 1. Replace :lightness-max-back with :lightness-max-general, get rid of it
 1. Find way to control variable with many sources. Override with last setting came.
 — from console
