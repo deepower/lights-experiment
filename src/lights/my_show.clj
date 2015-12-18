@@ -391,16 +391,6 @@
         (show/fixtures-named "head") #(= (:type %) :shutter))))
 )
 
-(defn london-init
-  "Init of London show"
-  []
-  (midi-help "automap")
-  (midi-help "audio6")
-  (shutter-open)
-  )
-
-(london-init)
-
 (defn calibrate-heads
   "Helper functions to calibrate heads"
   []
@@ -414,8 +404,8 @@
       "Tilt" (params/build-variable-param :tilt)
       (afterglow.channels/extract-channels
         (show/fixtures-named "head") #(= (:type %) :tilt))))
-  (afterglow.show/set-variable! :pan 0)
-  (afterglow.show/set-variable! :tilt 0)
+  (afterglow.show/set-variable! :pan 130)
+  (afterglow.show/set-variable! :tilt 120)
   )
 
 (defn head-direction-z
@@ -425,8 +415,19 @@
 
   (show/add-effect! :position
     (move/direction-effect
-     "Towards z" (params/build-direction-param :x 0 :y 0 :z 1) (show/fixtures-named "head")))
+     "Towards z" (params/build-direction-param :x 0 :y -1 :z 0) (show/fixtures-named "head")))
   )
+
+(defn london-init
+  "Init of London show"
+  []
+  (midi-help "automap")
+  (midi-help "audio6")
+  (shutter-open)
+  (calibrate-heads)
+  )
+
+(london-init)
 
 (defn head-aim-center
   "Direct head to the center of dancefloor"
