@@ -451,11 +451,22 @@
         :short-name "Sparkle scene"
         ))
 
+  (ct/set-cue! (:cue-grid *show*) 2 7
+    (cues/cue :sparkle (fn [_] (afterglow.effects/scene "Sparkle all with heads"
+        (afterglow.effects.fun/sparkle (show/fixtures-named "back") :chance :sparkle-chance :fade-time :sparkle-fade)
+        (afterglow.effects.fun/sparkle (show/fixtures-named "front") :chance :sparkle-chance :fade-time :sparkle-fade)
+        (afterglow.effects.fun/dimmer-sparkle (show/fixtures-named "head") :chance :sparkle-chance :fade-time :sparkle-fade)))
+        :held true :priority 100
+        :short-name "Sparkle all with heads"
+        ))
+
   (ct/set-cue! (:cue-grid *show*) 7 7
     (cues/cue :reset-beat
       (fn [_] (afterglow.rhythm/metro-start (:metronome *show*) 1)
               (afterglow.effects/blank))
-        :held true))
+        :held true
+        :short-name "Reset metronome"
+        ))
 
   (ct/set-cue! (:cue-grid *show*) 0 6
     (cues/cue :dimmers (fn [_] (dimmer-effect 255 (show/all-fixtures)))
