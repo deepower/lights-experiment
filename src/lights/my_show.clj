@@ -230,14 +230,18 @@
       (show/add-midi-control-to-var-mapping
         "Automap MIDI" 10 25 :lightness-max-general :min 0 :max 100)
       (show/add-midi-control-to-var-mapping
+        "Automap MIDI" 10 25 :lightness-max-general-percent :min 0 :max 1)
+      (show/add-midi-control-to-var-mapping
         "Automap MIDI" 10 26 :lightness-max-back :min 0 :max 100)
       (show/add-midi-control-to-var-mapping
         "Automap MIDI" 10 27 :lightness-max-front :min 0 :max 30)
       (show/add-midi-control-to-var-mapping
+        "Automap MIDI" 10 27 :lightness-max-front-percent :min 0 :max 1)
+      (show/add-midi-control-to-var-mapping
         "Automap MIDI" 10 24 :lightness-min-general :min 0 :max 100
           :transform-fn (fn [v] (- 0 v)))
 
-      ; Reset beat
+      ; Reset beat mapping from MIDI button to a cue
       (show/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 58 7 7)
 
       ; Defaults
@@ -247,6 +251,8 @@
       (afterglow.show/set-variable! :lightness-max-front 30)
       (afterglow.show/set-variable! :lightness-max-back 50)
       (afterglow.show/set-variable! :lightness-max-general 50)
+      (afterglow.show/set-variable! :lightness-max-general-percent 1)
+      (afterglow.show/set-variable! :lightness-max-front-percent 1)
 
     )
   )
