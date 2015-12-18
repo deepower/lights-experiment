@@ -178,6 +178,9 @@
 ; Reset dimmers to full brightness
 (show/add-effect! :dimmers (global-dimmer-effect 255))
 
+; Dim front lights, so they don't light too much
+(afterglow.show/set-variable! :lightness-max-front-percent 0.3)
+
 ; 2DO rewrite to connect multiple devices
 (defn midi-help
   "Bind MIDI devices"
@@ -208,7 +211,13 @@
       (show/add-midi-control-to-var-mapping
         "Komplete Audio 6" 9 0 :audio-drums :min -10 :max 50)
       (show/add-midi-control-to-var-mapping
+        "Komplete Audio 6" 9 0 :audio-drums-front :min -10 :max 50
+        :transform-fn (fn [v] (* v (afterglow.show/get-variable :lightness-max-front-percent))))
+      (show/add-midi-control-to-var-mapping
         "Komplete Audio 6" 9 1 :audio-bass :max 50)
+      (show/add-midi-control-to-var-mapping
+        "Komplete Audio 6" 9 1 :audio-bass-front :max 50
+        :transform-fn (fn [v] (* v (afterglow.show/get-variable :lightness-max-front-percent))))
       (show/add-midi-control-to-var-mapping
         "Komplete Audio 6" 9 2 :audio-solo :max 50)
       (show/add-midi-control-to-var-mapping
@@ -506,7 +515,7 @@
         (afterglow.effects.color/color-effect
           "Drums" (params/build-color-param :h :main-hue :s 100 :l :audio-drums) (show/fixtures-named "back"))
         (afterglow.effects.color/color-effect
-          "Bass" (params/build-color-param :h :main-hue :s 100 :l :audio-drums) (show/fixtures-named "front"))
+          "Bass" (params/build-color-param :h :main-hue :s 100 :l :audio-drums-front) (show/fixtures-named "front"))
     ))))
   (ct/set-cue! (:cue-grid *show*) 1 3
     (cues/cue :color  (fn [_] (afterglow.effects/scene
@@ -514,7 +523,7 @@
         (afterglow.effects.color/color-effect
           "Bass" (params/build-color-param :h :main-hue :s 100 :l :audio-bass) (show/fixtures-named "back"))
         (afterglow.effects.color/color-effect
-          "Bass" (params/build-color-param :h :main-hue :s 100 :l :audio-bass) (show/fixtures-named "front"))
+          "Bass" (params/build-color-param :h :main-hue :s 100 :l :audio-bass-front) (show/fixtures-named "front"))
     ))))
   (ct/set-cue! (:cue-grid *show*) 2 3
     (cues/cue :color  (fn [_] (afterglow.effects/scene
@@ -522,7 +531,7 @@
         (afterglow.effects.color/color-effect
           "Drums" (params/build-color-param :h :main-hue :s 100 :l :audio-drums) (show/fixtures-named "back"))
         (afterglow.effects.color/color-effect
-          "Bass" (params/build-color-param :h :main-hue :s 100 :l :audio-bass) (show/fixtures-named "front"))
+          "Bass" (params/build-color-param :h :main-hue :s 100 :l :audio-bass-front) (show/fixtures-named "front"))
     ))))
 
   (let [light-param (params/build-oscillated-param
