@@ -250,6 +250,11 @@
         "Automap MIDI" 10 24 :lightness-min-general :min 0 :max 100
           :transform-fn (fn [v] (- 0 v)))
 
+      (show/add-midi-control-to-var-mapping
+        "Automap MIDI" 10 23 :main-hue :min 0 :max 360)
+
+      
+
       ; Reset beat mapping from MIDI button to a cue
       (show/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 58 7 7)
 
@@ -394,7 +399,7 @@
   (shutter-open)
   )
 
-;(london-init)
+(london-init)
 
 (defn calibrate-heads
   "Helper functions to calibrate heads"
@@ -441,11 +446,11 @@
   []
 
   (ct/set-cue! (:cue-grid *show*) 0 7
-    (cues/cue :sparkle (fn [_] (fun/sparkle (show/all-fixtures)
-      :chance :sparkle-chance
-      :fade-time :sparkle-fade))
-        :held true
-        :priority 100
+    (cues/cue :sparkle (fn [_] (afterglow.effects/scene "Sparkle all"
+        (afterglow.effects.fun/sparkle (show/fixtures-named "back") :chance :sparkle-chance :fade-time :sparkle-fade)
+        (afterglow.effects.fun/sparkle (show/fixtures-named "front") :chance :sparkle-chance :fade-time :sparkle-fade)
+        (afterglow.effects.fun/dimmer-sparkle (show/fixtures-named "head") :chance :sparkle-chance :fade-time :sparkle-fade)))
+        :held true :priority 100
         :short-name "Sparkle all"
         ))
 
@@ -457,15 +462,6 @@
         :held true
         :priority 100
         :short-name "Sparkle scene"
-        ))
-
-  (ct/set-cue! (:cue-grid *show*) 2 7
-    (cues/cue :sparkle (fn [_] (afterglow.effects/scene "Sparkle all with heads"
-        (afterglow.effects.fun/sparkle (show/fixtures-named "back") :chance :sparkle-chance :fade-time :sparkle-fade)
-        (afterglow.effects.fun/sparkle (show/fixtures-named "front") :chance :sparkle-chance :fade-time :sparkle-fade)
-        (afterglow.effects.fun/dimmer-sparkle (show/fixtures-named "head") :chance :sparkle-chance :fade-time :sparkle-fade)))
-        :held true :priority 100
-        :short-name "Sparkle all with heads"
         ))
 
   (ct/set-cue! (:cue-grid *show*) 7 7
@@ -623,6 +619,11 @@
   (ct/set-cue! (:cue-grid *show*) 5 0
     (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :main-hue 300))
       :short-name "Purple"
+      )
+    )
+  (ct/set-cue! (:cue-grid *show*) 6 0
+    (cues/cue :set-main-hue (fn [_] (fx/blank))
+      :short-name "MIDI"
       )
     )
 )

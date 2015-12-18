@@ -17,7 +17,9 @@ CHO: All is black, strobe with random light
 
 1. USB to DMX
 1. OLA
+1. Check if USB device is connected in OLA
 1. Connect MIDI devices (laptops with clock)
+1. Launch AutomapServer (for Nocturne)
 1. Clojure REPL
 
 ## Someday
