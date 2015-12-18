@@ -179,7 +179,7 @@
 (show/add-effect! :dimmers (global-dimmer-effect 255))
 
 ; 2DO rewrite to connect multiple devices
-(defn midi
+(defn midi-help
   "Bind MIDI devices"
   [interface]
 
@@ -256,13 +256,13 @@
       (afterglow.midi/sync-to-midi-clock "USB Uno MIDI Interface"))
     )
 
-  (if (= interface "identify")
-    (afterglow.midi/midi-mapping))
+  (if (or (= interface "identify") (= interface "id"))
+    (afterglow.midi/identify-mapping))
 
 )
 
 
-;(midi "automap")
+;(midi-help "automap")
 
 (defn set-hue
   "Set main hue"
@@ -371,8 +371,8 @@
 (defn london-init
   "Init of London show"
   []
-  (midi "automap")
-  (midi "audio6")
+  (midi-help "automap")
+  (midi-help "audio6")
   (shutter-open)
   )
 
