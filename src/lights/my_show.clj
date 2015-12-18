@@ -115,7 +115,7 @@
   (show/patch-fixture! :scene-side-1 (rgbw-simple) 1 33  :x 0 :y 1.7 :z 1.5)
 
   (show/patch-fixture! :head-1 (jb-systems-sirius-8ch) 1 49 :x 3.5  :y 7  :z 2.8)
-  (show/patch-fixture! :head-2 (jb-systems-sirius-8ch) 1 65 :x 3.5  :y 7  :z 2.8) 
+  (show/patch-fixture! :head-2 (jb-systems-sirius-8ch) 1 65 :x 3.5  :y 7  :z 2.8)
   (show/patch-fixture! :head-3 (jb-systems-sirius-8ch) 1 81 :x 3.5  :y 7  :z 2.8)
   (show/patch-fixture! :head-4 (jb-systems-sirius-8ch) 1 97 :x 3.5  :y 7  :z 2.8)
 
@@ -470,11 +470,12 @@
   (ct/set-cue! (:cue-grid *show*) 2 6
     (cues/cue :dimmers (fn [_]
       (afterglow.effects/scene
+        (dimmer-effect 0 (show/fixtures-named "head"))
         (dimmer-effect 255 (show/fixtures-named "front"))
         (dimmer-effect 255 (show/fixtures-named "back"))
         )
       )
-    :short-name "Heads down"
+    :short-name "Back & front"
     ))
 
   (ct/set-cue! (:cue-grid *show*) 3 6
@@ -521,8 +522,7 @@
         "Sawtooth Back"
           (afterglow.effects.color/color-effect
             "Bass" (params/build-color-param :h :main-hue :s 100 :l light-param) (show/fixtures-named "back"))
-      )))
-  ))
+      )))))
 
 
   (let [light-param (params/build-oscillated-param
@@ -532,24 +532,22 @@
         "Sawtooth Front"
           (afterglow.effects.color/color-effect
             "Bass" (params/build-color-param :h :main-hue :s 100 :l light-param) (show/fixtures-named "front"))
-      )))
-  ))
+      )))))
 
 
 
   (let [light-param-back (params/build-oscillated-param
-        (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)
+        (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-back)
         light-param-front (params/build-oscillated-param
         (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-front)]
     (ct/set-cue! (:cue-grid *show*) 2 2
       (cues/cue :color  (fn [_] (afterglow.effects/scene
-        "Sawtooth Back & Front"
+        "Sawtooth Back & Front 1"
           (afterglow.effects.color/color-effect
             "Back" (params/build-color-param :h :main-hue :s 100 :l light-param-back) (show/fixtures-named "back"))
           (afterglow.effects.color/color-effect
-            "Front" (params/build-color-param :h :main-hue :s 100 :l light-param-front (show/fixtures-named "front"))
-      )))
-  )))
+            "Bass" (params/build-color-param :h :main-hue :s 100 :l light-param-front) (show/fixtures-named "front"))
+      )))))
 
   (ct/set-cue! (:cue-grid *show*) 1 2
     (cues/cue :color  (fn [_] (afterglow.effects/scene

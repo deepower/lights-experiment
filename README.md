@@ -1,6 +1,7 @@
 ## 2DO
 
 1. bind-midi variables, that have :maximum linked to :max-lightness
+1. Replace :lightness-max-back with :lightness-max-general, get rid of it
 1. [waiting] Find a way to use Dynamic parameters with other Dynamic parameters in math
 1. Change intensity of pulse (width of the pulse) with MIDI
 1. Find way to control variable with many sources. Override with last setting came.
