@@ -252,7 +252,7 @@
       (show/add-midi-control-to-var-mapping
         "Automap MIDI" 10 25 :lightness-max-general-percent :min 0 :max 1)
       (show/add-midi-control-to-var-mapping
-        "Automap MIDI" 10 26 :lightness-max-back :min 0 :max 100)
+        "Automap MIDI" 10 26 :lightness-max-general :min 0 :max 100)
       (show/add-midi-control-to-var-mapping
         "Automap MIDI" 10 27 :lightness-max-front :min 0 :max 50)
       (show/add-midi-control-to-var-mapping
@@ -274,7 +274,6 @@
       (afterglow.show/set-variable! :sparkle-fade 100)
       (afterglow.show/set-variable! :lightness-min-general 0)
       (afterglow.show/set-variable! :lightness-max-front 50)
-      (afterglow.show/set-variable! :lightness-max-back 50)
       (afterglow.show/set-variable! :lightness-max-general 50)
       (afterglow.show/set-variable! :lightness-max-general-percent 1)
       (afterglow.show/set-variable! :lightness-max-front-percent 1)
