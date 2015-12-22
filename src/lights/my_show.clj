@@ -264,8 +264,6 @@
       (show/add-midi-control-to-var-mapping
         "Automap MIDI" 10 23 :main-hue :min 0 :max 360)
 
-      
-
       ; Reset beat mapping from MIDI button to a cue
       (show/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 58 7 7)
 
@@ -277,7 +275,6 @@
       (afterglow.show/set-variable! :lightness-max-general 50)
       (afterglow.show/set-variable! :lightness-max-general-percent 1)
       (afterglow.show/set-variable! :lightness-max-front-percent 1)
-
     )
   )
 
@@ -370,24 +367,6 @@
     (show/add-effect! :color (global-color-effect
       (params/build-color-param :h :main-hue :s 100 :l param)))
   )
-)
-
-(defn separate-colors
-  "Asign different colors to different fixtures. Experiment.
-  Take care of this https://github.com/brunchboy/afterglow/issues/30#issuecomment-165255504"
-  []
-  (afterglow.effects/scene "Different colors"
-    (show/add-effect! :color (afterglow.effects.color/color-effect
-      "Plain red" (create-color "red") (show/fixtures-named "back-odd")))
-    (show/add-effect! :color (afterglow.effects.color/color-effect
-      "Plain Blue" (create-color "blue") (show/fixtures-named "back-even")))
-    )
-  )
-
-(defn reset-beat
-  "Reset beat of the show"
-  []
-  (afterglow.rhythm/metro-start (:metronome *show*) 1)
 )
 
 (fiat-lux)
