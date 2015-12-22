@@ -427,7 +427,7 @@
   (calibrate-heads)
   )
 
-(london-init)
+;(london-init)
 
 (defn head-aim-center
   "Direct head to the center of dancefloor"
@@ -466,12 +466,9 @@
         ))
 
   (ct/set-cue! (:cue-grid *show*) 7 7
-    (cues/cue :reset-beat
-      (fn [_] (afterglow.rhythm/metro-start (:metronome *show*) 1)
-              (afterglow.effects/blank))
-        :held true
-        :short-name "Reset metronome"
-        ))
+    (cues/code-cue (fn [show snapshot]
+      (rhythm/metro-start (:metronome show) 1))
+        "Reset"))
 
   (ct/set-cue! (:cue-grid *show*) 0 6
     (cues/cue :dimmers (fn [_] (dimmer-effect 255 (show/all-fixtures)))
