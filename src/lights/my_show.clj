@@ -185,9 +185,6 @@
 ; Reset dimmers to full brightness
 (show/add-effect! :dimmers (global-dimmer-effect 255))
 
-; Dim front lights, so they don't light too much
-(afterglow.show/set-variable! :lightness-max-front-percent 0.3)
-
 ; 2DO rewrite to connect multiple devices
 (defn midi-help
   "Bind MIDI devices"
@@ -262,15 +259,6 @@
 
       ; Reset beat mapping from MIDI button to a cue
       (show/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 58 7 7)
-
-      ; Defaults
-      (afterglow.show/set-variable! :sparkle-chance 0.1)
-      (afterglow.show/set-variable! :sparkle-fade 100)
-      (afterglow.show/set-variable! :lightness-min-general 0)
-      (afterglow.show/set-variable! :lightness-max-front 50)
-      (afterglow.show/set-variable! :lightness-max-general 50)
-      (afterglow.show/set-variable! :lightness-max-general-percent 1)
-      (afterglow.show/set-variable! :lightness-max-front-percent 1)
     )
   )
 
@@ -287,19 +275,17 @@
   )
 )
 
+; Default settings
+(afterglow.show/set-variable! :sparkle-chance 0.1)
+(afterglow.show/set-variable! :sparkle-fade 100)
+(afterglow.show/set-variable! :lightness-min-general 0)
+(afterglow.show/set-variable! :lightness-max-front 20)
+(afterglow.show/set-variable! :lightness-max-general 50)
+(afterglow.show/set-variable! :lightness-max-general-percent 0.5)
+(afterglow.show/set-variable! :lightness-max-front-percent 0.2)
+(afterglow.show/set-variable! :use-hue-chase false)
 
 ;(midi-help "automap")
-
-(defn set-hue
-  "Set main hue"
-  [hue]
-  (afterglow.show/set-variable! :main-hue hue)
-)
-
-(set-hue 0)
-
-; Max lightness in the show
-(afterglow.show/set-variable! :max-lightness 50)
 
 (defn light-sawtooth
   "Change light according to sawtooth osc"
@@ -595,6 +581,11 @@
   (ct/set-cue! (:cue-grid *show*) 6 0
     (cues/cue :set-main-hue (fn [_] (fx/blank))
       :short-name "MIDI"
+      )
+    )
+  (ct/set-cue! (:cue-grid *show*) 7 0
+    (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :use-hue-chase true))
+      :short-name "Change every phrase +30"
       )
     )
 )
