@@ -533,11 +533,17 @@
       (let [light-param (params/build-oscillated-param
         (oscillators/sawtooth :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
         (fx/chase "Saw all, hue adjust" [(global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 30 :s 100 :l light-param))
           (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 60 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 90 :s 100 :l light-param))
           (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 120 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 150 :s 100 :l light-param))
           (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 180 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 210 :s 100 :l light-param))
           (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 240 :s 100 :l light-param))
-          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 300 :s 100 :l light-param))]
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 270 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 300 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 330 :s 100 :l light-param))]
           (params/build-step-param :interval :phrase :fade-fraction 0.3 :fade-curve :sine)
           :beyond :loop
           ))))))
