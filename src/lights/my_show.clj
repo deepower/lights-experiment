@@ -137,9 +137,9 @@
   ;; all the expanded, patched fixtures in it.
   '*show*)
 
-;(use-my-show)
+(use-my-show)
 
-(use-london-show)
+;(use-london-show)
 
 ; Logging level set to :info
 (core/init-logging)
@@ -440,16 +440,6 @@
         :short-name "Sparkle all"
         ))
 
-  (ct/set-cue! (:cue-grid *show*) 1 7
-    (cues/cue :sparkle (fn [_] (fun/sparkle (show/fixtures-named "scene")
-      ;2DO find good values here
-      :chance 0.3
-      :fade-time 400))
-        :held true
-        :priority 100
-        :short-name "Sparkle scene"
-        ))
-
   (ct/set-cue! (:cue-grid *show*) 7 7
     (cues/code-cue (fn [show snapshot]
       (rhythm/metro-start (:metronome show) 1))
@@ -514,7 +504,7 @@
     ))))
 
   (let [light-param (params/build-oscillated-param
-        (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-back)]
+        (oscillators/sawtooth :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-back)]
     (ct/set-cue! (:cue-grid *show*) 0 2
       (cues/cue :color  (fn [_] (afterglow.effects/scene
         "Sawtooth Back"
@@ -524,7 +514,7 @@
 
 
   (let [light-param (params/build-oscillated-param
-        (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-front)]
+        (oscillators/sawtooth :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-front)]
     (ct/set-cue! (:cue-grid *show*) 1 2
       (cues/cue :color  (fn [_] (afterglow.effects/scene
         "Sawtooth Front"
@@ -532,12 +522,10 @@
             "Bass" (params/build-color-param :h :main-hue :s 100 :l light-param) (show/fixtures-named "front"))
       )))))
 
-
-
   (let [light-param-back (params/build-oscillated-param
-        (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-back)
+        (oscillators/sawtooth :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-back)
         light-param-front (params/build-oscillated-param
-        (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-front)]
+        (oscillators/sawtooth :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-front)]
     (ct/set-cue! (:cue-grid *show*) 2 2
       (cues/cue :color  (fn [_] (afterglow.effects/scene
         "Sawtooth Back & Front"
@@ -551,7 +539,7 @@
     (cues/cue :color  (fn [_] (afterglow.effects/scene
       "Sine Back & Front"
       (let [light-param (params/build-oscillated-param
-        (oscillators/sine-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
+        (oscillators/sine :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
         (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
       )
     ))))
@@ -560,7 +548,7 @@
     (cues/cue :color  (fn [_] (afterglow.effects/scene
       "Sawtooth All"
       (let [light-param (params/build-oscillated-param
-        (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
+        (oscillators/sawtooth :interval :beat :interval-ratio :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
         (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
       )
     ))))
@@ -569,7 +557,7 @@
     (cues/cue :color  (fn [_] (afterglow.effects/scene
       "Sine All"
       (let [light-param (params/build-oscillated-param
-        (oscillators/sine-beat :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
+        (oscillators/sine :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
         (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
       )
     ))))
