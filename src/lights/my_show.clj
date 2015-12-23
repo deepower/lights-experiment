@@ -284,6 +284,7 @@
 (afterglow.show/set-variable! :lightness-max-general-percent 0.5)
 (afterglow.show/set-variable! :lightness-max-front-percent 0.2)
 (afterglow.show/set-variable! :use-hue-chase false)
+(afterglow.show/set-variable! :osc-beat-ratio 4)
 
 (defn light-sawtooth-phase
   "Change light of fixtures with phase shift. WIP."
@@ -512,7 +513,7 @@
     (cues/cue :color  (fn [_] (afterglow.effects/scene
       "Sawtooth All"
       (let [light-param (params/build-oscillated-param
-        (oscillators/sawtooth :interval :beat :interval-ratio :beat-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
+        (oscillators/sawtooth :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
         (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
       )
     ))))
@@ -525,6 +526,21 @@
         (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
       )
     ))))
+
+  (ct/set-cue! (:cue-grid *show*) 2 1
+    (cues/cue :color  (fn [_] (afterglow.effects/scene
+      "Saw all, change colors 16B"
+      (let [light-param (params/build-oscillated-param
+        (oscillators/sawtooth :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
+        (fx/chase "Saw all, hue adjust" [(global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 60 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 120 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 180 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 240 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 300 :s 100 :l light-param))]
+          (params/build-step-param :interval :phrase :fade-fraction 0.3 :fade-curve :sine)
+          :beyond :loop
+          ))))))
 
   (ct/set-cue! (:cue-grid *show*) 0 0
     (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :main-hue 0)) 
@@ -559,11 +575,6 @@
   (ct/set-cue! (:cue-grid *show*) 6 0
     (cues/cue :set-main-hue (fn [_] (fx/blank))
       :short-name "MIDI"
-      )
-    )
-  (ct/set-cue! (:cue-grid *show*) 7 0
-    (cues/cue :set-main-hue (fn [_] (var-fx/variable-effect @var-binder :use-hue-chase true))
-      :short-name "Change every phrase +30"
       )
     )
 )
