@@ -285,28 +285,6 @@
 (afterglow.show/set-variable! :lightness-max-front-percent 0.2)
 (afterglow.show/set-variable! :use-hue-chase false)
 
-;(midi-help "automap")
-
-(defn light-sawtooth
-  "Change light according to sawtooth osc"
-  []
-  (let [light-param (params/build-oscillated-param
-    (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :max :max-lightness)]
-    (show/add-effect! :color (global-color-effect
-      (params/build-color-param :h :main-hue :s 100 :l light-param)))
-  )
-)
-
-(defn light-sine
-  "Change light according to sine osc"
-  []
-  (let [light-param (params/build-oscillated-param
-    (oscillators/sine-beat :beat-ratio :osc-beat-ratio :down? true :phase 0.5) :max :max-lightness)]
-    (show/add-effect! :color (global-color-effect
-      (params/build-color-param :h :main-hue :s 100 :l light-param)))
-  )
-)
-
 (defn light-sawtooth-phase
   "Change light of fixtures with phase shift. WIP."
   []
@@ -350,8 +328,6 @@
       (params/build-color-param :h :main-hue :s 100 :l param)))
   )
 )
-
-(fiat-lux)
 
 (defn shutter-open
   "Open shutters on heads in London show"
@@ -399,6 +375,8 @@
   )
 
 ;(london-init)
+
+(fiat-lux)
 
 (defn head-aim-center
   "Direct head to the center of dancefloor"
