@@ -442,6 +442,36 @@
     :short-name "Back only"
     ))
 
+  (ct/set-cue! (:cue-grid *show*) 0 4
+    (cues/cue :position  (fn [_] (afterglow.effects/scene
+      "Change heads directions"
+      (fx/chase "Chase heads directions" [
+        (move/direction-effect "" (params/build-direction-param :x 0 :y 0 :z 1) (show/fixtures-named "head"))
+        (move/direction-effect "" (params/build-direction-param :x 1 :y 0 :z 0) (show/fixtures-named "head"))
+        (move/direction-effect "" (params/build-direction-param :x 0 :y 0 :z -1) (show/fixtures-named "head"))
+        (move/direction-effect "" (params/build-direction-param :x 0 :y -1 :z 0) (show/fixtures-named "head"))
+        (move/direction-effect "" (params/build-direction-param :x -1 :y 0 :z 0) (show/fixtures-named "head"))
+        ]
+        (params/build-step-param :interval :beat :fade-fraction 0.3 :fade-curve :sine)
+        :beyond :loop
+        )))))
+
+  (ct/set-cue! (:cue-grid *show*) 1 4
+    (cues/cue :position  (fn [_] (afterglow.effects/scene
+      "Heads corners of dancefloor"
+      (fx/chase "Heads corners of dancefloor" [
+        (move/aim-effect "" (params/build-aim-param :x 0 :y 0 :z 0) (show/fixtures-named "head"))
+        (move/aim-effect "" (params/build-aim-param :x 5 :y 0 :z 0) (show/fixtures-named "head"))
+        (move/aim-effect "" (params/build-aim-param :x -5 :y 0 :z 0) (show/fixtures-named "head"))
+        (move/aim-effect "" (params/build-aim-param :x -5 :y 0 :z 5) (show/fixtures-named "head"))
+        (move/aim-effect "" (params/build-aim-param :x 0 :y 0 :z 5) (show/fixtures-named "head"))
+        (move/aim-effect "" (params/build-aim-param :x 5 :y 0 :z 5) (show/fixtures-named "head"))
+        (move/aim-effect "" (params/build-aim-param :x 5 :y 0 :z 10) (show/fixtures-named "head"))
+        (move/aim-effect "" (params/build-aim-param :x -5 :y 0 :z 10) (show/fixtures-named "head"))
+        ]
+        (params/build-step-param :interval :beat :fade-fraction 0.3 :fade-curve :sine)
+        :beyond :loop
+        )))))
 
   (ct/set-cue! (:cue-grid *show*) 0 3
     (cues/cue :color  (fn [_] (afterglow.effects/scene
