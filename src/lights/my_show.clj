@@ -284,7 +284,7 @@
 (afterglow.show/set-variable! :lightness-max-general-percent 0.5)
 (afterglow.show/set-variable! :lightness-max-front-percent 0.2)
 (afterglow.show/set-variable! :use-hue-chase false)
-(afterglow.show/set-variable! :osc-beat-ratio 4)
+(afterglow.show/set-variable! :osc-beat-ratio 8)
 
 (defn light-sawtooth-phase
   "Change light of fixtures with phase shift. WIP."
@@ -562,6 +562,29 @@
       "Saw all, change colors 16B"
       (let [light-param (params/build-oscillated-param
         (oscillators/sawtooth :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
+        (fx/chase "Saw all, hue adjust" [(global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 30 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 60 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 90 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 120 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 150 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 180 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 210 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 240 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 270 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 300 :s 100 :l light-param))
+          (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 330 :s 100 :l light-param))]
+          (params/build-step-param :interval :phrase :fade-fraction 0.3 :fade-curve :sine)
+          :beyond :loop
+          ))))))
+
+
+
+  (ct/set-cue! (:cue-grid *show*) 3 1
+    (cues/cue :color  (fn [_] (afterglow.effects/scene
+      "Sine all, change colors 16B"
+      (let [light-param (params/build-oscillated-param
+        (oscillators/sine :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
         (fx/chase "Saw all, hue adjust" [(global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
           (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 30 :s 100 :l light-param))
           (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 60 :s 100 :l light-param))
