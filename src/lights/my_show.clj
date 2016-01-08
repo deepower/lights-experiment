@@ -264,6 +264,7 @@
 
   (if (= interface "quneo")
     (do
+      ; WIP. Right now this code forces cue into a loop and there is no way back. This cue works until stopped from web interface. After that is does not start anymore.
       (cues/add-midi-control-to-cue-mapping "Bus 1" 0
         :note 36 0 7 :use-velocity? true)
       )
