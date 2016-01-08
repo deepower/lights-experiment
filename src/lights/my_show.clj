@@ -262,6 +262,13 @@
     )
   )
 
+  (if (= interface "quneo")
+    (do
+      (cues/add-midi-control-to-cue-mapping "Bus 1" 0
+        :note 36 0 7 :use-velocity? true)
+      )
+    )
+
   (if (= interface "uno-clock")
     (show/sync-to-external-clock
       (afterglow.midi/sync-to-midi-clock "USB Uno MIDI Interface"))
