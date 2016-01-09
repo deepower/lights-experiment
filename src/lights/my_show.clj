@@ -469,7 +469,6 @@
     :short-name "TEST 255"
     ))
 
-  ; 2DO: write MIDI controlled dimmers, to control lights dimmer from Live
   (ct/set-cue! (:cue-grid *show*) 7 6
     (cues/cue :dimmers (fn [_]
       (afterglow.effects/scene
