@@ -276,6 +276,10 @@
       (show/add-midi-control-to-var-mapping
         "Bus 1" 11 36 :front-1-note :max 255)
       )
+
+      (show/add-midi-control-to-var-mapping
+          "Bus 1" 11 37 :main-adjust-hue :max 60)
+        )
     )
 
   (if (= interface "uno-clock")
@@ -302,6 +306,7 @@
 (afterglow.show/set-variable! :use-hue-chase false)
 (afterglow.show/set-variable! :osc-beat-ratio 8)
 (afterglow.show/set-variable! :front-1-note 0)
+(afterglow.show/set-variable! :main-adjust-hue 0)
 
 (defn light-sawtooth-phase
   "Change light of fixtures with phase shift. WIP."
@@ -615,7 +620,11 @@
           :beyond :loop
           ))))))
 
-
+  (ct/set-cue! (:cue-grid *show*) 3 1
+    (cues/cue :color  (fn [_] (afterglow.effects/scene
+      "Solid with adjust"
+        (global-color-effect (params/build-color-param :h :main-hue :adjust-hue :main-adjust-hue :s 100 :l 50))
+    ))))
 
   (ct/set-cue! (:cue-grid *show*) 3 1
     (cues/cue :color  (fn [_] (afterglow.effects/scene
