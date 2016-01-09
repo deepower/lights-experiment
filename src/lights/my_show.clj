@@ -268,9 +268,14 @@
       (cues/add-midi-control-to-cue-mapping "Bus 1" 0
         :note 36 0 7 :use-velocity? true)
       )
+    )
 
+  (if (= interface "live")
+    (do
+      ; WIP. Right now this code forces cue into a loop and there is no way back. This cue works until stopped from web interface. After that is does not start anymore.
       (show/add-midi-control-to-var-mapping
-        "Bus 1" 11 36 :front-1-note :max 1)
+        "Bus 1" 11 36 :front-1-note :max 255)
+      )
     )
 
   (if (= interface "uno-clock")
@@ -454,13 +459,22 @@
     :short-name "Back only"
     ))
 
+  (ct/set-cue! (:cue-grid *show*) 4 6
+    (cues/cue :dimmers (fn [_]
+      (afterglow.effects/scene
+        (dimmer-effect 255 (show/fixtures-named "front") :add-virtual-dimmers? true :htp? false)
+        (dimmer-effect 255 (show/fixtures-named "back") :add-virtual-dimmers? true :htp? false)
+        )
+      )
+    :short-name "TEST 255"
+    ))
+
   ; 2DO: write MIDI controlled dimmers, to control lights dimmer from Live
   (ct/set-cue! (:cue-grid *show*) 7 6
     (cues/cue :dimmers (fn [_]
       (afterglow.effects/scene
-        (afterglow.effects/conditional-effect "Enabled?" (params/build-variable-param :front-1-note)
-          (dimmer-effect 255 (show/fixtures-named "front") :add-virtual-dimmers? true :htp? false)
-        )
+        (dimmer-effect 0 (show/fixtures-named "back") :add-virtual-dimmers? true :htp? false)
+        (dimmer-effect (params/build-variable-param :front-1-note) (show/fixtures-named "front") :add-virtual-dimmers? true :htp? false)
         )
       )
     :short-name "MIDI controlled"
