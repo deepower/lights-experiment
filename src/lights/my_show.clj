@@ -419,21 +419,21 @@
         "Reset"))
 
   (ct/set-cue! (:cue-grid *show*) 0 6
-    (cues/cue :dimmers (fn [_] (dimmer-effect 255 (show/all-fixtures)))
+    (cues/cue :dimmers (fn [_] (dimmer-effect 255 (show/all-fixtures) :add-virtual-dimmers? true :htp? false))
         :short-name "All dimmers up"
         ))
 
   (ct/set-cue! (:cue-grid *show*) 1 6
-    (cues/cue :dimmers (fn [_] (dimmer-effect 0 (show/all-fixtures)))
+    (cues/cue :dimmers (fn [_] (dimmer-effect 0 (show/all-fixtures) :add-virtual-dimmers? true :htp? false))
         :short-name "All dimmers down"
         ))
 
   (ct/set-cue! (:cue-grid *show*) 2 6
     (cues/cue :dimmers (fn [_]
       (afterglow.effects/scene
-        (dimmer-effect 0 (show/fixtures-named "head"))
-        (dimmer-effect 255 (show/fixtures-named "front"))
-        (dimmer-effect 255 (show/fixtures-named "back"))
+        (dimmer-effect 0 (show/fixtures-named "head") :add-virtual-dimmers? true :htp? false)
+        (dimmer-effect 255 (show/fixtures-named "front") :add-virtual-dimmers? true :htp? false)
+        (dimmer-effect 255 (show/fixtures-named "back") :add-virtual-dimmers? true :htp? false)
         )
       )
     :short-name "Back & front"
@@ -442,9 +442,9 @@
   (ct/set-cue! (:cue-grid *show*) 3 6
     (cues/cue :dimmers (fn [_]
       (afterglow.effects/scene
-        (dimmer-effect 0 (show/fixtures-named "head"))
-        (dimmer-effect 0 (show/fixtures-named "front"))
-        (dimmer-effect 255 (show/fixtures-named "back"))
+        (dimmer-effect 0 (show/fixtures-named "head") :add-virtual-dimmers? true :htp? false)
+        (dimmer-effect 0 (show/fixtures-named "front") :add-virtual-dimmers? true :htp? false)
+        (dimmer-effect 255 (show/fixtures-named "back") :add-virtual-dimmers? true :htp? false)
         )
       )
     :short-name "Back only"
