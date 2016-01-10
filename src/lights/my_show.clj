@@ -262,25 +262,16 @@
     )
   )
 
-  (if (= interface "quneo")
-    (do
-      ; WIP. Right now this code forces cue into a loop and there is no way back. This cue works until stopped from web interface. After that is does not start anymore.
-      (cues/add-midi-control-to-cue-mapping "Bus 1" 0
-        :note 36 0 7 :use-velocity? true)
-      )
-    )
-
   (if (= interface "live")
     (do
       ; WIP. Right now this code forces cue into a loop and there is no way back. This cue works until stopped from web interface. After that is does not start anymore.
       (show/add-midi-control-to-var-mapping
         "Bus 1" 11 36 :front-1-note :max 255)
-      )
 
       (show/add-midi-control-to-var-mapping
           "Bus 1" 11 37 :main-adjust-hue :max 60)
         )
-    )
+  )
 
   (if (= interface "uno-clock")
     (show/sync-to-external-clock
@@ -294,6 +285,13 @@
     (show/sync-to-external-clock (afterglow.midi/sync-to-midi-clock "Traktor Virtual Output"))
   )
 )
+
+; Map Quneo MIDI controller, when it is connected
+(defn map-quneo
+  []
+  (cues/add-midi-control-to-cue-mapping "quneo" 0 :note 36 0 7)
+)
+(afterglow.midi/watch-for "quneo" map-quneo)
 
 ; Default settings
 (afterglow.show/set-variable! :sparkle-chance 0.1)
