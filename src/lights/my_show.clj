@@ -289,7 +289,7 @@
 ; Map Quneo MIDI controller, when it is connected
 (defn map-quneo
   []
-  (cues/add-midi-control-to-cue-mapping "quneo" 0 :note 36 0 7)
+  (cues/add-midi-control-to-cue-mapping "quneo" 0 :note 36 0 7 :feedback-on false)
   (show/add-midi-control-to-var-mapping
     "quneo" 0 24 :sparkle-chance :min 0.01 :max 0.2)
   (show/add-midi-control-to-var-mapping
