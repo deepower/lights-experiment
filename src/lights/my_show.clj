@@ -466,16 +466,6 @@
     :short-name "Back only"
     ))
 
-  (ct/set-cue! (:cue-grid *show*) 4 6
-    (cues/cue :dimmers (fn [_]
-      (afterglow.effects/scene
-        (dimmer-effect 255 (show/fixtures-named "front") :add-virtual-dimmers? true :htp? false)
-        (dimmer-effect 255 (show/fixtures-named "back") :add-virtual-dimmers? true :htp? false)
-        )
-      )
-    :short-name "TEST 255"
-    ))
-
   (ct/set-cue! (:cue-grid *show*) 7 6
     (cues/cue :dimmers (fn [_]
       (afterglow.effects/scene
