@@ -290,6 +290,10 @@
 (defn map-quneo
   []
   (cues/add-midi-control-to-cue-mapping "quneo" 0 :note 36 0 7)
+  (show/add-midi-control-to-var-mapping
+    "quneo" 0 24 :sparkle-chance :min 0.01 :max 0.2)
+  (show/add-midi-control-to-var-mapping
+    "quneo" 0 25 :sparkle-fade :min 1 :max 500)
 )
 (afterglow.midi/watch-for "quneo" map-quneo)
 
