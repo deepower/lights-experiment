@@ -237,8 +237,8 @@
         "Automap MIDI" 10 21 :sparkle-chance :min 0.01 :max 0.2)
       (show/add-midi-control-to-var-mapping
         "Automap MIDI" 10 22 :sparkle-fade :min 1 :max 500)
-      (show/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 51 0 7)
-      (show/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 52 1 7)
+      (cues/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 51 0 7)
+      (cues/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 52 1 7)
       (show/add-midi-control-to-var-mapping "Automap MIDI" 10 66 :osc-beat-ratio :max 3 :transform-fn (fn [v] (Math/pow 2 (Math/round (- 3 v)))))
       (show/add-midi-control-to-var-mapping
         "Automap MIDI" 10 25 :lightness-max-general :min 0 :max 100)
@@ -258,7 +258,7 @@
         "Automap MIDI" 10 23 :main-hue :min 0 :max 360)
 
       ; Reset beat mapping from MIDI button to a cue
-      (show/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 58 7 7)
+      (cues/add-midi-control-to-cue-mapping "Automap MIDI" 10 :control 58 7 7)
     )
   )
 
@@ -309,50 +309,6 @@
 (afterglow.show/set-variable! :osc-beat-ratio 8)
 (afterglow.show/set-variable! :front-1-note 0)
 (afterglow.show/set-variable! :main-adjust-hue 0)
-
-(defn light-sawtooth-phase
-  "Change light of fixtures with phase shift. WIP."
-  []
-  (let [phase-gradient (params/build-spatial-param  ; Spread a phase shift across fixtures
-      (show/all-fixtures)
-      (fn [head] (- (:x head) (:min-x @(:dimensions *show*)))) :max 1)]
-    (let [light-param (params/build-oscillated-param
-      (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true :phase phase-gradient) :max :max-lightness)]
-      (show/add-effect! :color (global-color-effect
-        (params/build-color-param :s 100 :l light-param :h :main-hue))
-      )
-    )
-  )
-)
-
-(defn light-sawtooth-color
-  "Change light according to sawtooth osc & hue phase"
-  ([]
-    (light-sawtooth-color (show/all-fixtures))
-    )
-  ([fixtures]
-    (let [light-param (params/build-oscillated-param
-      (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :max :max-lightness)
-          hue-param (params/build-oscillated-param
-      (oscillators/square-beat :beat-ratio 16 :down? true) :max 90)
-    ]
-      (show/add-effect! :color (afterglow.effects.color/color-effect
-                          "Light sawtooth color" (params/build-color-param :h :main-hue :s 100 :l light-param :adjust-hue hue-param) fixtures))
-    ))
-)
-
-(defn light-to-param
-  "Change light according to dynamic parameter"
-  [param]
-  (let [light-param (params/build-oscillated-param
-    (oscillators/sawtooth-beat :beat-ratio :osc-beat-ratio :down? true) :max :max-lightness)
-        hue-param (params/build-oscillated-param
-    (oscillators/square-beat :beat-ratio 16 :down? true) :max 90)
-  ]
-    (show/add-effect! :color (global-color-effect
-      (params/build-color-param :h :main-hue :s 100 :l param)))
-  )
-)
 
 (defn shutter-open
   "Open shutters on heads in London show"
@@ -532,7 +488,7 @@
           "Bass" (params/build-color-param :h :main-hue :s 100 :l :audio-bass-front) (show/fixtures-named "front"))
     ))))
 
-  (let [light-param (params/build-oscillated-param
+  (let [light-param (oscillators/build-oscillated-param
         (oscillators/sawtooth :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-back)]
     (ct/set-cue! (:cue-grid *show*) 0 2
       (cues/cue :color  (fn [_] (afterglow.effects/scene
@@ -542,7 +498,7 @@
       )))))
 
 
-  (let [light-param (params/build-oscillated-param
+  (let [light-param (oscillators/build-oscillated-param
         (oscillators/sawtooth :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-front)]
     (ct/set-cue! (:cue-grid *show*) 1 2
       (cues/cue :color  (fn [_] (afterglow.effects/scene
@@ -551,9 +507,9 @@
             "Bass" (params/build-color-param :h :main-hue :s 100 :l light-param) (show/fixtures-named "front"))
       )))))
 
-  (let [light-param-back (params/build-oscillated-param
+  (let [light-param-back (oscillators/build-oscillated-param
         (oscillators/sawtooth :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-back)
-        light-param-front (params/build-oscillated-param
+        light-param-front (oscillators/build-oscillated-param
         (oscillators/sawtooth :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-front)]
     (ct/set-cue! (:cue-grid *show*) 2 2
       (cues/cue :color  (fn [_] (afterglow.effects/scene
@@ -567,7 +523,7 @@
   (ct/set-cue! (:cue-grid *show*) 1 2
     (cues/cue :color  (fn [_] (afterglow.effects/scene
       "Sine Back & Front"
-      (let [light-param (params/build-oscillated-param
+      (let [light-param (oscillators/build-oscillated-param
         (oscillators/sine :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
         (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
       )
@@ -576,7 +532,7 @@
   (ct/set-cue! (:cue-grid *show*) 0 1
     (cues/cue :color  (fn [_] (afterglow.effects/scene
       "Sawtooth All"
-      (let [light-param (params/build-oscillated-param
+      (let [light-param (oscillators/build-oscillated-param
         (oscillators/sawtooth :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
         (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
       )
@@ -585,7 +541,7 @@
   (ct/set-cue! (:cue-grid *show*) 1 1
     (cues/cue :color  (fn [_] (afterglow.effects/scene
       "Sine All"
-      (let [light-param (params/build-oscillated-param
+      (let [light-param (oscillators/build-oscillated-param
         (oscillators/sine :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
         (global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
       )
@@ -594,7 +550,7 @@
   (ct/set-cue! (:cue-grid *show*) 2 1
     (cues/cue :color  (fn [_] (afterglow.effects/scene
       "Saw all, change colors 16B"
-      (let [light-param (params/build-oscillated-param
+      (let [light-param (oscillators/build-oscillated-param
         (oscillators/sawtooth :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
         (fx/chase "Saw all, hue adjust" [(global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
           (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 30 :s 100 :l light-param))
@@ -621,7 +577,7 @@
   (ct/set-cue! (:cue-grid *show*) 3 1
     (cues/cue :color  (fn [_] (afterglow.effects/scene
       "Sine all, change colors 16B"
-      (let [light-param (params/build-oscillated-param
+      (let [light-param (oscillators/build-oscillated-param
         (oscillators/sine :interval :beat :interval-ratio :osc-beat-ratio :down? true) :min :lightness-min-general :max :lightness-max-general)]
         (fx/chase "Saw all, hue adjust" [(global-color-effect (params/build-color-param :h :main-hue :s 100 :l light-param))
           (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 30 :s 100 :l light-param))
