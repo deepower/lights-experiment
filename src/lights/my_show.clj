@@ -635,7 +635,7 @@
           (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 270 :s 100 :l light-param))
           (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 300 :s 100 :l light-param))
           (global-color-effect (params/build-color-param :h :main-hue :adjust-hue 330 :s 100 :l light-param))]
-          (params/build-step-param :interval :phrase :fade-fraction 0.3 :fade-curve :sine)
+          (params/build-step-param :interval :beat :interval-ratio 4 :fade-fraction 0.3 :fade-curve :sine)
           :beyond :loop
           ))))))
 
